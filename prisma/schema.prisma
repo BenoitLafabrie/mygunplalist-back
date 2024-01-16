@@ -1,0 +1,141 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Achievements {
+  achievement_id      Int                  @id @default(autoincrement())
+  name                String               @db.VarChar(255)
+  description         String?              @db.LongText
+  Achievements_images Achievements_images?
+  User_achievements   User_achievements[]
+}
+
+model Achievements_images {
+  achievement_image_id Int          @id @default(autoincrement())
+  achievement_id       Int          @unique
+  image_path           String?      @db.Text
+  Achievements         Achievements @relation(fields: [achievement_id], references: [achievement_id], onDelete: NoAction, onUpdate: NoAction, map: "Achievements_images_Achievements_achievement_id_fk")
+}
+
+model Comments {
+  comment_id      Int     @id @default(autoincrement())
+  user_id         Int
+  comment_content String? @db.LongText
+  Users           Users   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "Comments_Users_user_id_fk")
+}
+
+model Friends {
+  friend_id Int   @id @default(autoincrement())
+  user_id   Int
+  Users     Users @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "Friends_Users_user_id_fk")
+
+  @@index([user_id], map: "Friend_User_user_id_fk")
+}
+
+model Items {
+  item_id      Int            @id @default(autoincrement())
+  name         String         @db.VarChar(255)
+  release_date String?        @db.VarChar(255)
+  barcode      String?        @db.VarChar(255)
+  description  String?        @db.LongText
+  ROG_Url      String?        @db.Text
+  Items_images Items_images[]
+  Items_props  Items_props?
+  Mygunplalist Mygunplalist[]
+  Wishlist     Wishlists[]
+  Item_status  Item_status?
+}
+
+model Items_images {
+  item_image_id Int     @id @default(autoincrement())
+  item_id       Int
+  image_path    String? @db.Text
+  Items         Items   @relation(fields: [item_id], references: [item_id], onDelete: NoAction, onUpdate: NoAction, map: "Items_images_Items_item_id_fk")
+}
+
+model Items_props {
+  item_props_id Int     @id @default(autoincrement())
+  item_id       Int     @unique
+  grade         String? @db.VarChar(255)
+  scale         String? @db.VarChar(255)
+  series        String? @db.VarChar(255)
+  Items         Items   @relation(fields: [item_id], references: [item_id], onDelete: NoAction, onUpdate: NoAction, map: "Items_props_Items_item_id_fk")
+}
+
+model Item_status {
+  item_status_id  Int                @id @default(autoincrement())
+  item_id         Int                @unique
+  mygunplalist_id Int                @unique
+  status          Item_status_status @default(Garage)
+  Items           Items              @relation(fields: [item_id], references: [item_id], onDelete: NoAction, onUpdate: NoAction, map: "Item_status_Items_item_id_fk")
+  Mygunplalist    Mygunplalist       @relation(fields: [mygunplalist_id], references: [mygunplalist_id], onDelete: NoAction, onUpdate: NoAction, map: "Item_status_Mygunplalist_mygunplalist_id_fk")
+}
+
+enum Item_status_status {
+  Garage
+  Assembling
+  Deployed
+}
+
+model Mygunplalist {
+  mygunplalist_id Int          @id @default(autoincrement())
+  user_id         Int          @unique
+  Items           Items[]
+  Users           Users        @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "Mygunplalist_Users_user_id_fk")
+  Item_status     Item_status?
+}
+
+model User_achievements {
+  user_achievement_id Int          @id @default(autoincrement())
+  achievement_id      Int
+  user_id             Int
+  Achievements        Achievements @relation(fields: [achievement_id], references: [achievement_id], onDelete: NoAction, onUpdate: NoAction, map: "User_achievements_Achievement_id_fk")
+  Users               Users        @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "User_achievements_User_user_id_fk")
+}
+
+model Users {
+  user_id           Int                 @id @default(autoincrement())
+  username          String              @db.VarChar(255)
+  firstname         String?             @db.VarChar(255)
+  lastname          String?             @db.VarChar(255)
+  email             String              @unique @db.VarChar(255)
+  password          String              @db.VarChar(255)
+  birthdate         DateTime            @db.Date
+  address           String?             @db.VarChar(255)
+  postcode          String?             @db.VarChar(255)
+  city              String?             @db.VarChar(255)
+  country           String?             @db.VarChar(255)
+  gender            String?             @db.VarChar(255)
+  createdAt         DateTime            @default(now())
+  role              Users_role          @default(user)
+  Comments          Comments[]
+  Friends           Friends[]
+  User_achievements User_achievements[]
+  Users_images      Users_images[]
+  Wishlists         Wishlists?
+  Mygunplalist      Mygunplalist?
+}
+
+model Users_images {
+  user_image_id Int     @id @default(autoincrement())
+  user_id       Int
+  image_path    String? @db.Text
+  Users         Users   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "Users_images_Users_user_id_fk")
+}
+
+model Wishlists {
+  wishlist_id Int     @id @default(autoincrement())
+  user_id     Int     @unique
+  Users       Users   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "Wishlists_Users_user_id_fk")
+  Items       Items[]
+}
+
+enum Users_role {
+  user
+  admin
+}
