@@ -1,4 +1,3 @@
-/* global process */
 import express from "express";
 import cors from "cors";
 import createError from "http-errors";
@@ -63,7 +62,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", rootRouter);
-app.use("/auth", authRouter);
+app.use("/", authRouter);
 app.use("/users", usersRouter);
 app.use("/user-achievements", userAchievementsRouter);
 app.use("/user-images", userImagesRouter);
