@@ -5,7 +5,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import { PrismaClient } from "@prisma/client";
-import authRouter from "./src/routes/auth.mjs";
+// import authRouter from "./src/routes/auth.mjs";
 import rootRouter from "./src/routes/root.mjs";
 import achievementsRouter from "./src/routes/achievements.mjs";
 import achievementImagesRouter from "./src/routes/achievementImages.mjs";
@@ -66,7 +66,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", rootRouter);
-app.use("/", authRouter);
+// app.use("/", authRouter);
 app.use("/users", usersRouter);
 app.use("/user-achievements", userAchievementsRouter);
 app.use("/user-images", userImagesRouter);
