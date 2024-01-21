@@ -4,7 +4,7 @@ import {
   insertItemStatus,
   getItemStatusById,
   updateItemStatus,
-} from "../models/ItemStatusManager.js";
+} from "../models/ItemStatusManager.mjs";
 
 const prisma = new PrismaClient();
 

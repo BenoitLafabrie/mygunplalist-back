@@ -1,6 +1,6 @@
 import * as express from "express";
-import wishlistsControllers from "../controllers/WishlistControllers.js";
-import AuthHelper from "../services/AuthHelper.js";
+import wishlistsControllers from "../controllers/WishlistControllers.mjs";
+import AuthHelper from "../services/AuthHelper.mjs";
 
 const router = express.Router();
 

@@ -3,7 +3,7 @@ import {
   insertAchievement,
   insertManyAchievements,
   updateAchievement,
-} from "../models/AchievementManager.js";
+} from "../models/AchievementManager.mjs";
 
 const prisma = new PrismaClient();
 

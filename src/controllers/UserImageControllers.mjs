@@ -5,7 +5,7 @@ import {
   getAllUserImages,
   getUserImageById,
   deleteUserImage,
-} from "../models/UserImageManager.js";
+} from "../models/UserImageManager.mjs";
 
 const createUserImageController = async (req, res) => {
   const { status, data } = await insertUserImage({

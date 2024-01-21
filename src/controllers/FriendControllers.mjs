@@ -5,7 +5,7 @@ import {
   getAllFriends,
   getFriendById,
   deleteFriend,
-} from "../models/FriendManager.js";
+} from "../models/FriendManager.mjs";
 
 const createFriendController = async (req, res) => {
   const { status, data } = await insertFriend({

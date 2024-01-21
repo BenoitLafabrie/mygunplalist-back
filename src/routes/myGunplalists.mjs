@@ -1,6 +1,6 @@
 import * as express from "express";
-import myGunplalistsControllers from "../controllers/MyGunplalistControllers.js";
-import AuthHelper from "../services/AuthHelper.js";
+import myGunplalistsControllers from "../controllers/MyGunplalistControllers.mjs";
+import AuthHelper from "../services/AuthHelper.mjs";
 
 const router = express.Router();
 

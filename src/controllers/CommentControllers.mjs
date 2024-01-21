@@ -5,7 +5,7 @@ import {
   getAllComments,
   getCommentById,
   deleteComment,
-} from "../models/CommentManager.js";
+} from "../models/CommentManager.mjs";
 
 const createCommentController = async (req, res) => {
   const { status, data } = await insertComment({

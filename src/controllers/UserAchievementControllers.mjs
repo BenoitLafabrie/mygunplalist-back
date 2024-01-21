@@ -5,7 +5,7 @@ import {
   getAllUserAchievements,
   getUserAchievementById,
   deleteUserAchievement,
-} from "../models/UserAchievementManager.js";
+} from "../models/UserAchievementManager.mjs";
 
 const createUserAchievementController = async (req, res) => {
   const { status, data } = await insertUserAchievement({

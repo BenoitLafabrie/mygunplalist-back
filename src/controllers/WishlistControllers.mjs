@@ -4,7 +4,7 @@ import {
   getAllWishlists,
   getWishlistById,
   deleteWishlist,
-} from "../models/WishlistManager.js";
+} from "../models/WishlistManager.mjs";
 
 const createWishlistController = async (req, res) => {
   const { status, data } = await insertWishlist({

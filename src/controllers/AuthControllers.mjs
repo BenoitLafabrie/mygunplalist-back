@@ -1,4 +1,4 @@
-import { findUserByEmail } from "../models/AuthManager.js";
+import { findUserByEmail } from "../models/AuthManager.mjs";
 
 const getUserByEmailAndPassToNext = async (req, res, next) => {
   const { email, password } = req.body;

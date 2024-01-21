@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import pkg from "jsonwebtoken";
-import { insertUser, updateUser, getUserById } from "../models/UserManager.js";
+import { insertUser, updateUser, getUserById } from "../models/UserManager.mjs";
 import * as fs from "fs";
 
 const privateKey = fs.readFileSync("jwtRS256.key");

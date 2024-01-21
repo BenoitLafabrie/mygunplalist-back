@@ -5,7 +5,7 @@ import {
   updateItemImage,
   getItemImageById,
   deleteItemImage,
-} from "../models/ItemImageManager.js";
+} from "../models/ItemImageManager.mjs";
 
 const prisma = new PrismaClient();
 

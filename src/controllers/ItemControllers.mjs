@@ -3,7 +3,7 @@ import {
   insertItem,
   insertManyItems,
   updateItem,
-} from "../models/ItemManager.js";
+} from "../models/ItemManager.mjs";
 
 const prisma = new PrismaClient();
 

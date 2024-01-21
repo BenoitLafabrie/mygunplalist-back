@@ -1,5 +1,5 @@
 import * as express from "express";
-import userAchievementsControllers from "../controllers/UserAchievementControllers.js";
+import userAchievementsControllers from "../controllers/UserAchievementControllers.mjs";
 
 const router = express.Router();
 

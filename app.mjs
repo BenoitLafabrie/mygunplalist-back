@@ -5,21 +5,21 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import { PrismaClient } from "@prisma/client";
-import authRouter from "./src/routes/auth.js";
-import rootRouter from "./src/routes/root.js";
-import achievementsRouter from "./src/routes/achievements.js";
-import achievementImagesRouter from "./src/routes/achievementImages.js";
-import commentsRouter from "./src/routes/comments.js";
-import friendsRouter from "./src/routes/friends.js";
-import itemsRouter from "./src/routes/items.js";
-import itemImagesRouter from "./src/routes/itemImages.js";
-import itemPropsRouter from "./src/routes/itemProps.js";
-import itemsStatusRouter from "./src/routes/itemStatus.js";
-import myGunplalistsRouter from "./src/routes/myGunplalists.js";
-import usersRouter from "./src/routes/users.js";
-import userAchievementsRouter from "./src/routes/userAchievements.js";
-import userImagesRouter from "./src/routes/userImages.js";
-import wishlistsRouter from "./src/routes/wishlists.js";
+import authRouter from "./src/routes/auth.mjs";
+import rootRouter from "./src/routes/root.mjs";
+import achievementsRouter from "./src/routes/achievements.mjs";
+import achievementImagesRouter from "./src/routes/achievementImages.mjs";
+import commentsRouter from "./src/routes/comments.mjs";
+import friendsRouter from "./src/routes/friends.mjs";
+import itemsRouter from "./src/routes/items.mjs";
+import itemImagesRouter from "./src/routes/itemImages.mjs";
+import itemPropsRouter from "./src/routes/itemProps.mjs";
+import itemsStatusRouter from "./src/routes/itemStatus.mjs";
+import myGunplalistsRouter from "./src/routes/myGunplalists.mjs";
+import usersRouter from "./src/routes/users.mjs";
+import userAchievementsRouter from "./src/routes/userAchievements.mjs";
+import userImagesRouter from "./src/routes/userImages.mjs";
+import wishlistsRouter from "./src/routes/wishlists.mjs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
@@ -56,7 +56,11 @@ app
   });
 
 app.use(logger("dev"));
-app.use(express.json());
+app.use(
+  express.json({
+    /*{ limit: "20mb" }*/
+  })
+);
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));

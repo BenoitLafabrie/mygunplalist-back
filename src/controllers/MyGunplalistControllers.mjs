@@ -5,7 +5,7 @@ import {
   getMygunplalistById,
   updateMygunplalist,
   deleteMygunplalist,
-} from "../models/MyGunplalistManager.js";
+} from "../models/MyGunplalistManager.mjs";
 
 const createMyGunplalistController = async (req, res) => {
   const { status, data } = await insertMygunplalist({

@@ -1,5 +1,5 @@
 import * as express from "express";
-import userImagesControllers from "../controllers/UserImageControllers.js";
+import userImagesControllers from "../controllers/UserImageControllers.mjs";
 
 const router = express.Router();
 

@@ -1,5 +1,5 @@
 import * as express from "express";
-import itemPropsControllers from "../controllers/ItemPropsControllers.js";
+import itemPropsControllers from "../controllers/ItemPropsControllers.mjs";
 
 const router = express.Router();
 

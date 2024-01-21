@@ -1,5 +1,5 @@
 import * as express from "express";
-import achievementImagesControllers from "../controllers/AchievementImagesControllers.js";
+import achievementImagesControllers from "../controllers/AchievementImagesControllers.mjs";
 
 const router = express.Router();
 

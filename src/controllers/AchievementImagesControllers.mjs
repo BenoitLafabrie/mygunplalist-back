@@ -4,7 +4,7 @@ import {
   updateAchievementImage,
   getAllAchievementImages,
   getAchievementImageById,
-} from "../models/AchievementImageManager.js";
+} from "../models/AchievementImageManager.mjs";
 
 const createAchievementImageController = async (req, res) => {
   const { status, data } = await insertAchievementImage({

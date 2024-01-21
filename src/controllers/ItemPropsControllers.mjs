@@ -6,7 +6,7 @@ import {
   updateItemProps,
   getItemPropsById,
   deleteItemProps,
-} from "../models/ItemPropsManager.js";
+} from "../models/ItemPropsManager.mjs";
 
 const prisma = new PrismaClient();
 
