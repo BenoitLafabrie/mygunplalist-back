@@ -1,12 +1,12 @@
 import pkg from "@prisma/client";
 
 const { PrismaClient } = pkg;
-import pkg from "jsonwebtoken";
+import pkgToken from "jsonwebtoken";
 import { insertUser, updateUser, getUserById } from "../models/UserManager.js";
 import * as fs from "fs";
 
 const privateKey = fs.readFileSync("jwtRS256.key");
-const { sign } = pkg;
+const { sign } = pkgToken;
 const prisma = new PrismaClient();
 
 const createUserController = async (req, res) => {
