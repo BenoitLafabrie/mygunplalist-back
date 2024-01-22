@@ -3,9 +3,7 @@ import cors from "cors";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-import pkg from "@prisma/client";
-
-const { PrismaClient } = pkg;
+import { PrismaClient } from "@prisma/client";
 import authRouter from "./src/routes/auth.js";
 import rootRouter from "./src/routes/root.js";
 import achievementsRouter from "./src/routes/achievements.js";
