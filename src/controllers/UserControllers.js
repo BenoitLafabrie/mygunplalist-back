@@ -3,7 +3,7 @@ import pkg from "jsonwebtoken";
 import { insertUser, updateUser, getUserById } from "../models/UserManager.js";
 import * as fs from "fs";
 
-const privateKey = fs.readFileSync("jwtRS256.key");
+const privateKey = process.env.JWTRS256_KEY;
 const { sign } = pkg;
 const prisma = new PrismaClient();
 

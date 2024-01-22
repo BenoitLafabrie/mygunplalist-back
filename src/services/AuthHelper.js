@@ -2,7 +2,7 @@ import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import * as fs from "fs";
 
-const privateKey = fs.readFileSync("jwtRS256.key");
+const privateKey = process.env.JWTRS256_KEY;
 
 const hashingOptions = {
   type: argon2.argon2id,
