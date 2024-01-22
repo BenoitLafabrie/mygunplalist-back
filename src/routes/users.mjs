@@ -7,16 +7,16 @@ const router = express.Router();
 router.get("/", userControllers.getAllUsersController);
 
 router.get(
-  "/me",
+  "/me"
   /* authHelper.verifyToken, */
-  userControllers.getOneUserByIdController
+  // userControllers.getOneUserByIdController
 );
 
 router.get(
-  "/:id",
+  "/:id"
   /* authHelper.verifyToken,
   authHelper.checkSameParamsIdAsToken, */
-  userControllers.getOneUserByIdController
+  // userControllers.getOneUserByIdController
 );
 
 router.put(
