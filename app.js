@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import createError from "http-errors";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
@@ -76,11 +75,6 @@ app.use("/kits-props", itemPropsRouter);
 app.use("/mygunplalist", myGunplalistsRouter);
 app.use("/wishlist", wishlistsRouter);
 app.use("/item-status", itemsStatusRouter);
-
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
-});
 
 // error handler
 app.use(function (err, req, res, next) {
