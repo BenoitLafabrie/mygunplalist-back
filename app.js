@@ -37,7 +37,7 @@ process.on("SIGTERM", async () => {
 });
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(
   cors({
@@ -47,7 +47,7 @@ app.use(
 );
 
 app
-  .listen(port, () => {
+  .listen(port, "0.0.0.0", () => {
     console.info(`Server is listening on port ${port}`);
   })
   .on("error", (err) => {
