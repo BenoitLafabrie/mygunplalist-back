@@ -1,4 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import pkg from "@prisma/client";
+
+const { PrismaClient } = pkg;
 import pkg from "jsonwebtoken";
 import { insertUser, updateUser, getUserById } from "../models/UserManager.js";
 import * as fs from "fs";

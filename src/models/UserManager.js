@@ -1,4 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import pkg from "@prisma/client";
+
+const { PrismaClient } = pkg;
 import hashPassword from "../services/AuthHelper.js";
 
 const prisma = new PrismaClient();
