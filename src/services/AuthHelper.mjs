@@ -1,20 +1,15 @@
-import argon2 from "argon2";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import * as fs from "fs";
 
 const privateKey = fs.readFileSync("jwtRS256.key");
 
-const hashingOptions = {
-  type: argon2.argon2id,
-  memoryCost: 2 ** 16,
-  timeCost: 5,
-  parallelism: 1,
-};
+const saltRounds = 10;
 
 const hashPassword = async (req, res, next) => {
   if (typeof req.body.password !== "string") return next();
   try {
-    req.body.password = await argon2.hash(req.body.password, hashingOptions);
+    req.body.password = await bcrypt.hash(req.body.password, saltRounds);
     next();
   } catch (error) {
     console.error(error);
@@ -23,11 +18,7 @@ const hashPassword = async (req, res, next) => {
 };
 
 const verifyPassword = async (req, res) => {
-  const isVerified = await argon2.verify(
-    req.user.password,
-    req.body.password,
-    hashingOptions
-  );
+  const isVerified = await bcrypt.compare(req.body.password, req.user.password);
   console.log(isVerified);
   if (!isVerified) {
     res.status(401).send("Unauthorized");
