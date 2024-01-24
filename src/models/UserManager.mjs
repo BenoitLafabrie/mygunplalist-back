@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-// import hashPassword from "../services/AuthHelper.mjs";
+import hashPassword from "../services/AuthHelper.mjs";
 
 const prisma = new PrismaClient();
 
@@ -111,7 +111,7 @@ const updateUser = async (id, body) => {
     gender,
   } = body;
   try {
-    // const hashedPassword = password ? await hashPassword(password) : undefined;
+    const hashedPassword = password ? await hashPassword(password) : undefined;
     const user = await prisma.users.update({
       where: {
         user_id: parseInt(id),
@@ -123,7 +123,7 @@ const updateUser = async (id, body) => {
         email: email,
         birthdate: birthdate,
         role: role,
-        // password: hashedPassword,
+        password: hashedPassword,
         address: address,
         city: city,
         postcode: postcode,

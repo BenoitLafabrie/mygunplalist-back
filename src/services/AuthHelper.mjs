@@ -1,10 +1,10 @@
-/*import argon2 from "argon2";
+import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import * as fs from "fs";
 
 const privateKey = fs.readFileSync("jwtRS256.key");
 
-/* const hashingOptions = {
+const hashingOptions = {
   type: argon2.argon2id,
   memoryCost: 2 ** 16,
   timeCost: 5,
@@ -87,4 +87,3 @@ export default {
   verifyToken,
   checkSameParamsIdAsToken,
 };
- */
