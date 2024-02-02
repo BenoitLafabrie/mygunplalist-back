@@ -20,8 +20,6 @@ const usersRouter = require("./src/routes/users");
 const userAchievementsRouter = require("./src/routes/userAchievements");
 const userImagesRouter = require("./src/routes/userImages");
 const wishlistsRouter = require("./src/routes/wishlists");
-const { fileURLToPath } = require("url");
-const { dirname } = require("path");
 
 const prisma = new PrismaClient();
 
