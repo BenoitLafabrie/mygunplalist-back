@@ -120,7 +120,7 @@ const deleteItemProps = async (id) => {
   }
 };
 
-export {
+module.exports = {
   insertItemProps,
   insertManyItemProps,
   updateItemProps,

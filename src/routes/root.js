@@ -7,4 +7,4 @@ router.get("/", function (req, res, next) {
   res.send("You're on MyGunplaList!!!");
 });
 
-export default router;
+module.exports = router;

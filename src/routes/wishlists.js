@@ -35,4 +35,4 @@ router.delete(
   wishlistsControllers.deleteWishlistController
 );
 
-export default router;
+module.exports = router;

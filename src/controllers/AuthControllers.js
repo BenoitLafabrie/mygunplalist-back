@@ -9,4 +9,4 @@ const getUserByEmailAndPassToNext = async (req, res, next) => {
   next();
 };
 
-export default { getUserByEmailAndPassToNext };
+module.exports = { getUserByEmailAndPassToNext };

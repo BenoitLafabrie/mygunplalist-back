@@ -46,7 +46,7 @@ const updateAchievementImageController = async (req, res) => {
   res.status(status).send(data);
 };
 
-export default {
+module.exports = {
   createAchievementImagesController,
   getAllAchievementImagesController,
   getOneAchievementImageController,

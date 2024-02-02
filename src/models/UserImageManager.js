@@ -114,7 +114,7 @@ const deleteUserImage = async (id) => {
   }
 };
 
-export {
+module.exports = {
   insertUserImage,
   insertManyUserImages,
   updateUserImage,

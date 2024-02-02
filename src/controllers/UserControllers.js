@@ -115,7 +115,7 @@ const deleteUserByIdController = async (req, res) => {
   }
 };
 
-export default {
+module.exports = {
   createUserController,
   getAllUsersController,
   getOneUserByIdController,

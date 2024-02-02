@@ -9,4 +9,4 @@ router.get("/:id", itemPropsControllers.getOneItemPropsController);
 router.put("/:id", itemPropsControllers.updateItemPropsController);
 router.delete("/:id", itemPropsControllers.deleteItemPropsController);
 
-export default router;
+module.exports = router;

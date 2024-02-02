@@ -94,7 +94,7 @@ const updateAchievement = async (id, body) => {
   }
 };
 
-export {
+module.exports = {
   insertAchievement,
   insertManyAchievements,
   updateAchievement,

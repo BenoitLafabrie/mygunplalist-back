@@ -118,4 +118,10 @@ const updateItem = async (item_id, body) => {
   }
 };
 
-export { insertItem, insertManyItems, updateItem, getAllItems, getItemById };
+module.exports = {
+  insertItem,
+  insertManyItems,
+  updateItem,
+  getAllItems,
+  getItemById,
+};

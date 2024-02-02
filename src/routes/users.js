@@ -35,4 +35,4 @@ router.delete(
   authHelper.checkSameParamsIdAsToken,
   userControllers.deleteUserByIdController
 );
-export default router;
+module.exports = router;

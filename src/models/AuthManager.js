@@ -17,4 +17,4 @@ const findUserByEmail = async (email) => {
   }
 };
 
-export { findUserByEmail };
+module.exports = { findUserByEmail };

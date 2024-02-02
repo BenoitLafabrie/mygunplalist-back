@@ -52,7 +52,7 @@ const deleteFriendController = async (req, res) => {
   res.status(status).send(data);
 };
 
-export default {
+module.exports = {
   createFriendsController,
   getAllFriendsController,
   getOneFriendController,

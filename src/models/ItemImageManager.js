@@ -108,7 +108,7 @@ const deleteItemImage = async (id) => {
   }
 };
 
-export {
+module.exports = {
   insertItemImage,
   insertManyItemImages,
   updateItemImage,

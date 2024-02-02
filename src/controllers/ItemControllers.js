@@ -98,7 +98,7 @@ const deleteItemByIdController = async (req, res) => {
   }
 };
 
-export default {
+module.exports = {
   createItemsController,
   updateItemController,
   getAllItemsController,

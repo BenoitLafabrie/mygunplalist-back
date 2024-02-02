@@ -114,7 +114,7 @@ const deleteUserAchievement = async (id) => {
   }
 };
 
-export {
+module.exports = {
   insertUserAchievement,
   insertManyUserAchievements,
   updateUserAchievement,

@@ -152,4 +152,4 @@ const updateUser = async (id, body) => {
   }
 };
 
-export { insertUser, updateUser, getAllUsers, getUserById };
+module.exports = { insertUser, updateUser, getAllUsers, getUserById };

@@ -94,7 +94,7 @@ const updateAchievementImage = async (id, body) => {
   }
 };
 
-export {
+module.exports = {
   insertAchievementImage,
   insertManyAchievementImages,
   updateAchievementImage,

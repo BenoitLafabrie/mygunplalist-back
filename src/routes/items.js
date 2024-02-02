@@ -9,4 +9,4 @@ router.get("/:id", itemControllers.getOneItemByIdController);
 router.put("/:id", itemControllers.updateItemController);
 router.delete("/:id", itemControllers.deleteItemByIdController);
 
-export default router;
+module.exports = router;

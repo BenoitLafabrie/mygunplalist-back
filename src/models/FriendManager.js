@@ -108,7 +108,7 @@ const deleteFriend = async (id) => {
   }
 };
 
-export {
+module.exports = {
   insertFriend,
   insertManyFriends,
   updateFriend,

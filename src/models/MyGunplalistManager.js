@@ -126,7 +126,7 @@ const deleteMygunplalist = async (id) => {
   }
 };
 
-export {
+module.exports = {
   insertMygunplalist,
   insertManyGunplalists,
   updateMygunplalist,

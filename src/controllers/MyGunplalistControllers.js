@@ -53,7 +53,7 @@ const deleteMyGunplalistController = async (req, res) => {
   res.status(status).send(data);
 };
 
-export default {
+module.exports = {
   createMyGunplalistsController,
   getAllMyGunplalistsController,
   getOneMyGunplalistController,

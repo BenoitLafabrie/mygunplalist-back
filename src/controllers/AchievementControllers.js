@@ -92,7 +92,7 @@ const deleteAchievementByIdController = async (req, res) => {
   }
 };
 
-export default {
+module.exports = {
   createAchievementsController,
   updateAchievementController,
   getAllAchievementsController,

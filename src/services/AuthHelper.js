@@ -72,7 +72,7 @@ function checkSameParamsIdAsToken(req, res, next) {
   } else res.sendStatus(403);
 }
 
-export default {
+module.exports = {
   hashPassword,
   verifyPassword,
   verifyToken,

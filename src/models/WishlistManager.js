@@ -112,7 +112,7 @@ const deleteWishlist = async (id) => {
   }
 };
 
-export {
+module.exports = {
   insertWishlist,
   updateWishlist,
   deleteWishlist,

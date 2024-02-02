@@ -12,4 +12,4 @@ router.delete(
   userAchievementsControllers.deleteUserAchievementController
 );
 
-export default router;
+module.exports = router;

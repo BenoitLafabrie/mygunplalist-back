@@ -9,4 +9,4 @@ router.get("/:id", userImagesControllers.getOneUserImageController);
 router.put("/:id", userImagesControllers.updateUserImageController);
 router.delete("/:id", userImagesControllers.deleteUserImageController);
 
-export default router;
+module.exports = router;

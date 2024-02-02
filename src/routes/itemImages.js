@@ -9,4 +9,4 @@ router.get("/:id", itemImagesControllers.getOneItemImageController);
 router.put("/:id", itemImagesControllers.updateItemImageController);
 router.delete("/:id", itemImagesControllers.deleteItemImageController);
 
-export default router;
+module.exports = router;

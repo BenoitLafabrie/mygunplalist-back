@@ -93,4 +93,4 @@ app.use(function (err, req, res, next) {
   res.json(err.message);
 });
 
-export { app };
+module.exports = { app };

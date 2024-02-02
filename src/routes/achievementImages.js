@@ -17,4 +17,4 @@ router.put(
   achievementImagesControllers.updateAchievementImageController
 );
 
-export default router;
+module.exports = router;

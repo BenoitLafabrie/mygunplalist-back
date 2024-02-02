@@ -9,4 +9,4 @@ router.get("/:id", friendsControllers.getOneFriendController);
 router.put("/:id", friendsControllers.updateFriendController);
 router.delete("/:id", friendsControllers.deleteFriendController);
 
-export default router;
+module.exports = router;

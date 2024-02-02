@@ -61,4 +61,4 @@ const updateItemStatus = async ({ id, body }) => {
   }
 };
 
-export { insertItemStatus, getItemStatusById, updateItemStatus };
+module.exports = { insertItemStatus, getItemStatusById, updateItemStatus };

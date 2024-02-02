@@ -7,4 +7,4 @@ router.post("/", itemStatusControllers.createItemStatusController);
 router.get("/:id", itemStatusControllers.getOneItemStatusController);
 router.put("/:id", itemStatusControllers.updateItemStatusController);
 
-export default router;
+module.exports = router;

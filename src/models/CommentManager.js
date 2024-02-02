@@ -108,7 +108,7 @@ const deleteComment = async (id) => {
   }
 };
 
-export {
+module.exports = {
   insertComment,
   insertManyComments,
   updateComment,

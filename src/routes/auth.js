@@ -10,4 +10,4 @@ router.post(
   authHelper.verifyPassword
 );
 
-export default router;
+module.exports = router;

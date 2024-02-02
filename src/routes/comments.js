@@ -9,4 +9,4 @@ router.get("/:id", commentsControllers.getOneCommentController);
 router.put("/:id", commentsControllers.updateCommentController);
 router.delete("/:id", commentsControllers.deleteCommentController);
 
-export default router;
+module.exports = router;

@@ -35,4 +35,4 @@ router.delete(
   myGunplalistsControllers.deleteMyGunplalistController
 );
 
-export default router;
+module.exports = router;
