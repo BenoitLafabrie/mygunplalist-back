@@ -7,21 +7,38 @@ const {
 
 const prisma = new PrismaClient();
 
-const createItemStatusController = async (req, res) => {
-  const { status, data } = await insertItemStatus(req.body);
-  res.status(status).send(data);
+const createItemStatusController = (req, res) => {
+  insertItemStatus(req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const getOneItemStatusController = async (req, res) => {
-  const { status, data } = await getItemStatusById(req.params.id);
-  res.status(status).send(data);
+const getOneItemStatusController = (req, res) => {
+  getItemStatusById(req.params.id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const updateItemStatusController = async (req, res) => {
-  const { status, data } = await updateItemStatus(req.params.id, req.body);
-  res.status(status).send(data);
+const updateItemStatusController = (req, res) => {
+  updateItemStatus(req.params.id, req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
-
 module.exports = {
   createItemStatusController,
   getOneItemStatusController,

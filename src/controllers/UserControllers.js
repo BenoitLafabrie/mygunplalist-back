@@ -29,19 +29,26 @@ const createUserController = (req, res) => {
     });
 };
 
-const updateUserController = async (req, res) => {
-  const { status: oldStatus, data: oldData } = await getUserById(req.params.id);
-  if (oldStatus != 200) return res.status(oldStatus).send(oldData);
-  if (oldData.email === req.body.email) {
-    delete req.body.email;
-  }
-  const { status, data } = await updateUser(req.params.id, req.body);
-  res.status(status).send(data);
+const updateUserController = (req, res) => {
+  getUserById(req.params.id)
+    .then(({ status: oldStatus, data: oldData }) => {
+      if (oldStatus != 200) return res.status(oldStatus).send(oldData);
+      if (oldData.email === req.body.email) {
+        delete req.body.email;
+      }
+      return updateUser(req.params.id, req.body);
+    })
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      res.status(500).send({ error: "An error occurred" });
+    });
 };
 
-const getAllUsersController = async (req, res) => {
-  try {
-    const users = await prisma.users.findMany({
+const getAllUsersController = (req, res) => {
+  prisma.users
+    .findMany({
       select: {
         user_id: true,
         username: true,
@@ -57,18 +64,20 @@ const getAllUsersController = async (req, res) => {
         createdAt: true,
         role: true,
       },
+    })
+    .then((users) => {
+      res.status(200).send(users);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
     });
-    res.status(200).send(users);
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
 };
 
-const getOneUserByIdController = async (req, res) => {
+const getOneUserByIdController = (req, res) => {
   const id = req.payload.sub;
-  try {
-    const oneUserById = await prisma.users.findUnique({
+  prisma.users
+    .findUnique({
       where: {
         user_id: id,
       },
@@ -87,38 +96,42 @@ const getOneUserByIdController = async (req, res) => {
         createdAt: true,
         role: true,
       },
+    })
+    .then((oneUserById) => {
+      if (!oneUserById) {
+        res.status(404).send("Aucun utilisateur correspondant trouvé");
+      } else {
+        res.status(200).send(oneUserById);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
     });
-    if (!oneUserById) {
-      res.status(404).send("Aucun utilisateur correspondant trouvé");
-    } else {
-      res.status(200).send(oneUserById);
-    }
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
 };
 
-const deleteUserByIdController = async (req, res) => {
+const deleteUserByIdController = (req, res) => {
   const { id } = req.params;
 
   if (isNaN(parseInt(id))) {
     return res.status(400).send("ID non valide");
   }
 
-  try {
-    const deleteById = await prisma.users.delete({
+  prisma.users
+    .delete({
       where: { user_id: parseInt(id) },
+    })
+    .then((deleteById) => {
+      if (!deleteById) {
+        res.status(404).send("Aucun utilisateur correspondant trouvé");
+      } else {
+        res.status(200).send("Utilisateur supprimé");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
     });
-    if (!deleteById) {
-      res.status(404).send("Aucun utilisateur correspondant trouvé");
-    } else {
-      res.status(200).send("Utilisateur supprimé");
-    }
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
 };
 
 module.exports = {

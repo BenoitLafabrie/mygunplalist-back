@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 const insertAchievement = async ({ name, description }) => {
   try {
-    const achievement = await prisma.achievement.create({
+    const achievement = await prisma.achievements.create({
       data: {
         name,
         description,
@@ -39,7 +39,7 @@ const insertManyAchievements = async (items) => {
 
 const getAllAchievements = async () => {
   try {
-    const getAllAchievements = await prisma.achievement.findMany({
+    const getAllAchievements = await prisma.achievements.findMany({
       select: {
         id: true,
         name: true,
@@ -54,26 +54,28 @@ const getAllAchievements = async () => {
 };
 
 const getAchievementById = async (id) => {
-  try {
-    const getAchievement = await prisma.achievement.findUnique({
+  return prisma.achievements
+    .findUnique({
       where: {
         id: parseInt(id),
       },
+    })
+    .then((getAchievement) => {
+      if (!getAchievement) {
+        return { status: 404, data: "Not Found" };
+      }
+      return { status: 200, data: getAchievement };
+    })
+    .catch((error) => {
+      console.error(error);
+      return { status: 500, data: "Internal Error" };
     });
-    if (!getAchievement) {
-      return { status: 404, data: "Not Found" };
-    }
-    return { status: 200, data: getAchievement };
-  } catch (error) {
-    console.error(error);
-    return { status: 500, data: "Internal Error" };
-  }
 };
 
 const updateAchievement = async (id, body) => {
   const { name, description } = body;
-  try {
-    const achievement = await prisma.achievement.update({
+  return prisma.achievements
+    .update({
       where: {
         id: parseInt(id),
       },
@@ -86,12 +88,12 @@ const updateAchievement = async (id, body) => {
         name: true,
         description: true,
       },
+    })
+    .then((achievement) => ({ status: 200, data: achievement }))
+    .catch((error) => {
+      console.error(error);
+      return { status: 500, data: "Internal Error" };
     });
-    return { status: 200, data: achievement };
-  } catch (error) {
-    console.error(error);
-    return { status: 500, data: "Internal Error" };
-  }
 };
 
 module.exports = {

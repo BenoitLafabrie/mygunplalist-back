@@ -7,17 +7,29 @@ const {
 
 const prisma = new PrismaClient();
 
-const createAchievementController = async (req, res) => {
-  const { status, data } = await insertAchievement(req.body);
-  res.status(status).send(data);
+const createAchievementController = (req, res) => {
+  insertAchievement(req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const createManyAchievementsController = async (req, res) => {
-  const { status, data } = await insertManyAchievements(req.body);
-  res.status(status).send(data);
+const createManyAchievementsController = (req, res) => {
+  insertManyAchievements(req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const createAchievementsController = async (req, res, next) => {
+const createAchievementsController = (req, res, next) => {
   if (Array.isArray(req.body)) {
     return createManyAchievementsController(req, res, next);
   } else {
@@ -25,31 +37,39 @@ const createAchievementsController = async (req, res, next) => {
   }
 };
 
-const updateAchievementController = async (req, res) => {
-  const { status, data } = await updateAchievement(req.params.id, req.body);
-  res.status(status).send(data);
+const updateAchievementController = (req, res) => {
+  updateAchievement(req.params.id, req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const getAllAchievementsController = async (req, res) => {
-  try {
-    const achievements = await prisma.achievements.findMany({
+const getAllAchievementsController = (req, res) => {
+  prisma.achievements
+    .findMany({
       select: {
         id: true,
         name: true,
         description: true,
       },
+    })
+    .then((achievements) => {
+      res.status(200).send(achievements);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
     });
-    res.status(200).send(achievements);
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
 };
 
-const getOneAchievementByIdController = async (req, res) => {
+const getOneAchievementByIdController = (req, res) => {
   const id = parseInt(req.params.id);
-  try {
-    const oneAchievementById = await prisma.achievements.findUnique({
+  prisma.achievements
+    .findUnique({
       where: {
         id: id,
       },
@@ -58,38 +78,42 @@ const getOneAchievementByIdController = async (req, res) => {
         name: true,
         description: true,
       },
+    })
+    .then((oneAchievementById) => {
+      if (!oneAchievementById) {
+        res.status(404).send("Aucun succès correspondant trouvé");
+      } else {
+        res.status(200).send(oneAchievementById);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
     });
-    if (!oneAchievementById) {
-      res.status(404).send("Aucun succès correspondant trouvé");
-    } else {
-      res.status(200).send(oneAchievementById);
-    }
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
 };
 
-const deleteAchievementByIdController = async (req, res) => {
+const deleteAchievementByIdController = (req, res) => {
   const { id } = req.params;
 
   if (isNaN(parseInt(id))) {
     return res.status(400).send("ID non valide");
   }
 
-  try {
-    const deleteById = await prisma.achievements.delete({
+  prisma.achievements
+    .delete({
       where: { id: parseInt(id) },
+    })
+    .then((deleteById) => {
+      if (!deleteById) {
+        res.status(404).send("Aucun succès correspondant trouvé");
+      } else {
+        res.status(200).send("Succès supprimé");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
     });
-    if (!deleteById) {
-      res.status(404).send("Aucun succès correspondant trouvé");
-    } else {
-      res.status(200).send("Succès supprimé");
-    }
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
 };
 
 module.exports = {

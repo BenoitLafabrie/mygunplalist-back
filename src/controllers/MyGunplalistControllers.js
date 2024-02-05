@@ -7,24 +7,36 @@ const {
   deleteMygunplalist,
 } = require("../models/MyGunplalistManager");
 
-const createMyGunplalistController = async (req, res) => {
-  const { status, data } = await insertMygunplalist({
+const createMyGunplalistController = (req, res) => {
+  insertMygunplalist({
     ...req.body,
     userId: req.body.userId,
-  });
-  res.status(status).send(data);
+  })
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const createManyMyGunplalistsController = async (req, res) => {
-  const { status, data } = await insertManyGunplalists({
+const createManyMyGunplalistsController = (req, res) => {
+  insertManyGunplalists({
     ...req.body,
     itemId: req.payload.sub.id,
     userId: req.body.userId,
-  });
-  res.status(status).send(data);
+  })
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const createMyGunplalistsController = async (req, res, next) => {
+const createMyGunplalistsController = (req, res, next) => {
   if (Array.isArray(req.body)) {
     return createManyMyGunplalistsController(req, res, next);
   } else {
@@ -32,25 +44,49 @@ const createMyGunplalistsController = async (req, res, next) => {
   }
 };
 
-const getAllMyGunplalistsController = async (req, res) => {
+const getAllMyGunplalistsController = (req, res) => {
   const { id } = req.payload.sub;
-  const { status, data } = await getAllMygunplalists(parseInt(id));
-  res.status(status).send(data);
+  getAllMygunplalists(parseInt(id))
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const getOneMyGunplalistController = async (req, res) => {
-  const { status, data } = await getMygunplalistById(req.params.id);
-  res.status(status).send(data);
+const getOneMyGunplalistController = (req, res) => {
+  getMygunplalistById(req.params.id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const updateMyGunplalistController = async (req, res) => {
-  const { status, data } = await updateMygunplalist(req.params.id, req.body);
-  res.status(status).send(data);
+const updateMyGunplalistController = (req, res) => {
+  updateMygunplalist(req.params.id, req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const deleteMyGunplalistController = async (req, res) => {
-  const { status, data } = await deleteMygunplalist(req.params.id);
-  res.status(status).send(data);
+const deleteMyGunplalistController = (req, res) => {
+  deleteMygunplalist(req.params.id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
 module.exports = {

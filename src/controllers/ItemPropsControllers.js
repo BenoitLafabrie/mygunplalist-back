@@ -9,17 +9,29 @@ const {
 
 const prisma = new PrismaClient();
 
-const createItemPropsController = async (req, res) => {
-  const { status, data } = await insertItemProps(req.body);
-  res.status(status).send(data);
+const createItemPropsController = (req, res) => {
+  insertItemProps(req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const createManyItemPropsController = async (req, res) => {
-  const { status, data } = await insertManyItemProps(req.body);
-  res.status(status).send(data);
+const createManyItemPropsController = (req, res) => {
+  insertManyItemProps(req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const createItemsPropsController = async (req, res, next) => {
+const createItemsPropsController = (req, res, next) => {
   if (Array.isArray(req.body)) {
     return createManyItemPropsController(req, res, next);
   } else {
@@ -27,9 +39,9 @@ const createItemsPropsController = async (req, res, next) => {
   }
 };
 
-const getAllItemPropsController = async (req, res) => {
-  try {
-    const items = await prisma.items_props.findMany({
+const getAllItemPropsController = (req, res) => {
+  prisma.items_props
+    .findMany({
       select: {
         item_props_id: true,
         grade: true,
@@ -37,27 +49,47 @@ const getAllItemPropsController = async (req, res) => {
         series: true,
         item_id: true,
       },
+    })
+    .then((items) => {
+      res.status(200).send(items);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
     });
-    res.status(200).send(items);
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
 };
 
-const getOneItemPropsController = async (req, res) => {
-  const { status, data } = await getItemPropsById(req.params.id);
-  res.status(status).send(data);
+const getOneItemPropsController = (req, res) => {
+  getItemPropsById(req.params.id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const updateItemPropsController = async (req, res) => {
-  const { status, data } = await updateItemProps(req.params.id, req.body);
-  res.status(status).send(data);
+const updateItemPropsController = (req, res) => {
+  updateItemProps(req.params.id, req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const deleteItemPropsController = async (req, res) => {
-  const { status, data } = await deleteItemProps(req.params.id);
-  res.status(status).send(data);
+const deleteItemPropsController = (req, res) => {
+  deleteItemProps(req.params.id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
 module.exports = {

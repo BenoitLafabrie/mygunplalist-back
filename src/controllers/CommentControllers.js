@@ -7,20 +7,32 @@ const {
   deleteComment,
 } = require("../models/CommentManager");
 
-const createCommentController = async (req, res) => {
-  const { status, data } = await insertComment({
+const createCommentController = (req, res) => {
+  insertComment({
     ...req.body,
     userId: req.payload.sub.id,
-  });
-  res.status(status).send(data);
+  })
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const createManyCommentsController = async (req, res) => {
-  const { status, data } = await insertManyComments(req.body);
-  res.status(status).send(data);
+const createManyCommentsController = (req, res) => {
+  insertManyComments(req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const createCommentsController = async (req, res, next) => {
+const createCommentsController = (req, res, next) => {
   if (Array.isArray(req.body)) {
     return createManyCommentsController(req, res, next);
   } else {
@@ -28,25 +40,49 @@ const createCommentsController = async (req, res, next) => {
   }
 };
 
-const getAllCommentsController = async (req, res) => {
+const getAllCommentsController = (req, res) => {
   const { id } = req.payload.sub;
-  const { status, data } = await getAllComments(parseInt(id));
-  res.status(status).send(data);
+  getAllComments(parseInt(id))
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const getOneCommentController = async (req, res) => {
-  const { status, data } = await getCommentById(req.params.id);
-  res.status(status).send(data);
+const getOneCommentController = (req, res) => {
+  getCommentById(req.params.id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const updateCommentController = async (req, res) => {
-  const { status, data } = await updateComment(req.params.id, req.body);
-  res.status(status).send(data);
+const updateCommentController = (req, res) => {
+  updateComment(req.params.id, req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const deleteCommentController = async (req, res) => {
-  const { status, data } = await deleteComment(req.params.id);
-  res.status(status).send(data);
+const deleteCommentController = (req, res) => {
+  deleteComment(req.params.id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
 module.exports = {

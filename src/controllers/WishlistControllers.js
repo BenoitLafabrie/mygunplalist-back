@@ -6,33 +6,63 @@ const {
   deleteWishlist,
 } = require("../models/WishlistManager");
 
-const createWishlistController = async (req, res) => {
-  const { status, data } = await insertWishlist({
+const createWishlistController = (req, res) => {
+  insertWishlist({
     ...req.body,
     userId: req.body.userId,
-  });
-  res.status(status).send(data);
+  })
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const getAllWishlistsController = async (req, res) => {
+const getAllWishlistsController = (req, res) => {
   const { id } = req.payload.sub;
-  const { status, data } = await getAllWishlists(parseInt(id));
-  res.status(status).send(data);
+  getAllWishlists(parseInt(id))
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const getOneWishlistController = async (req, res) => {
-  const { status, data } = await getWishlistById(req.params.id);
-  res.status(status).send(data);
+const getOneWishlistController = (req, res) => {
+  getWishlistById(req.params.id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const updateWishlistController = async (req, res) => {
-  const { status, data } = await updateWishlist(req.params.id, req.body);
-  res.status(status).send(data);
+const updateWishlistController = (req, res) => {
+  updateWishlist(req.params.id, req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const deleteWishlistController = async (req, res) => {
-  const { status, data } = await deleteWishlist(req.params.id);
-  res.status(status).send(data);
+const deleteWishlistController = (req, res) => {
+  deleteWishlist(req.params.id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
 module.exports = {
