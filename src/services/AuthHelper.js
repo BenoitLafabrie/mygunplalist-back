@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
-const privateKey = fs.readFileSync("jwtRS256.key");
+const privateKey = process.env.JWTRS256_KEY;
 
 const saltRounds = 10;
 

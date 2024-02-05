@@ -7,7 +7,7 @@ const {
 } = require("../models/UserManager");
 const fs = require("fs");
 
-const privateKey = fs.readFileSync("jwtRS256.key");
+const privateKey = process.env.JWTRS256_KEY;
 const prisma = new PrismaClient();
 
 const createUserController = async (req, res) => {
