@@ -10,17 +10,23 @@ const fs = require("fs");
 const privateKey = fs.readFileSync("jwtRS256.key");
 const prisma = new PrismaClient();
 
-const createUserController = async (req, res) => {
-  let { status, data } = await insertUser(req.body);
-  if (status === 201) {
-    const payload = { user_id: data.user_id };
-    const token = jwt.sign(payload, privateKey, {
-      // expiresIn: "1h",
-      algorithm: "RS256",
+const createUserController = (req, res) => {
+  insertUser(req.body)
+    .then(({ status, data }) => {
+      if (status === 201) {
+        const payload = { user_id: data.user_id };
+        const token = jwt.sign(payload, privateKey, {
+          // expiresIn: "1h",
+          algorithm: "RS256",
+        });
+        data = { token };
+      }
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
     });
-    data = { token };
-  }
-  res.status(status).send(data);
 };
 
 const updateUserController = async (req, res) => {
