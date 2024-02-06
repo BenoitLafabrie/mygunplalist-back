@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 const insertFriend = async ({ friend_id, userId }) => {
   try {
-    const friend = await prisma.friend.create({
+    const friend = await prisma.friends.create({
       data: {
         friend_id,
         userId,
@@ -39,7 +39,7 @@ const insertManyFriends = async (items) => {
 
 const getAllFriends = async () => {
   try {
-    const getAllFriends = await prisma.friend.findMany({
+    const getAllFriends = await prisma.friends.findMany({
       select: {
         id: true,
         friend_id: true,
@@ -55,7 +55,7 @@ const getAllFriends = async () => {
 
 const getFriendById = async (id) => {
   try {
-    const getFriend = await prisma.Friend.findUnique({
+    const getFriend = await prisma.friends.findUnique({
       where: {
         id: parseInt(id),
       },
@@ -73,7 +73,7 @@ const getFriendById = async (id) => {
 const updateFriend = async (id, body) => {
   const { friend_id, userId } = body;
   try {
-    const friend = await prisma.friend.update({
+    const friend = await prisma.friends.update({
       where: {
         id: parseInt(id),
       },
@@ -96,7 +96,7 @@ const updateFriend = async (id, body) => {
 
 const deleteFriend = async (id) => {
   try {
-    const friend = await prisma.friend.delete({
+    const friend = await prisma.friends.delete({
       where: {
         id: parseInt(id),
       },

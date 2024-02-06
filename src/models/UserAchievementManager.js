@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 const insertUserAchievement = async ({ name, description, userId }) => {
   try {
-    const userAchievement = await prisma.userAchievement.create({
+    const userAchievement = await prisma.user_achievements.create({
       data: {
         name,
         description,
@@ -42,7 +42,7 @@ const insertManyUserAchievements = async (items) => {
 
 const getAllUserAchievements = async () => {
   try {
-    const getAllUserAchievements = await prisma.userAchievement.findMany({
+    const getAllUserAchievements = await prisma.user_achievements.findMany({
       select: {
         id: true,
         name: true,
@@ -59,7 +59,7 @@ const getAllUserAchievements = async () => {
 
 const getUserAchievementById = async (id) => {
   try {
-    const getUserAchievement = await prisma.UserAchievement.findUnique({
+    const getUserAchievement = await prisma.user_achievements.findUnique({
       where: {
         id: parseInt(id),
       },
@@ -77,7 +77,7 @@ const getUserAchievementById = async (id) => {
 const updateUserAchievement = async (id, body) => {
   const { name, description, userId } = body;
   try {
-    const userAchievement = await prisma.userAchievement.update({
+    const userAchievement = await prisma.user_achievements.update({
       where: {
         id: parseInt(id),
       },
@@ -102,7 +102,7 @@ const updateUserAchievement = async (id, body) => {
 
 const deleteUserAchievement = async (id) => {
   try {
-    const userAchievement = await prisma.userAchievement.delete({
+    const userAchievement = await prisma.user_achievements.delete({
       where: {
         id: parseInt(id),
       },

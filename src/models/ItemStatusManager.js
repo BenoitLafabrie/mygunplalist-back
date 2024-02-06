@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 const insertItemStatus = async ({ status, item_id, mygunplalist_id }) => {
   try {
-    const itemStatus = await prisma.items_status.create({
+    const itemStatus = await prisma.item_status.create({
       data: {
         status,
         item_id,
@@ -26,7 +26,7 @@ const insertItemStatus = async ({ status, item_id, mygunplalist_id }) => {
 
 const getItemStatusById = async (id) => {
   try {
-    const getItemStatus = await prisma.items_status.findUnique({
+    const getItemStatus = await prisma.item_status.findUnique({
       where: {
         item_status_id: id,
       },
@@ -45,7 +45,7 @@ const getItemStatusById = async (id) => {
 const updateItemStatus = async ({ id, body }) => {
   const { status, item_status_id } = body;
   try {
-    const itemStatus = await prisma.items_status.update({
+    const itemStatus = await prisma.item_status.update({
       where: {
         item_status_id: id,
       },
