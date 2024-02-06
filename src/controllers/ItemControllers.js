@@ -51,13 +51,9 @@ const updateItemController = (req, res) => {
 const getAllItemsController = (req, res) => {
   prisma.items
     .findMany({
-      select: {
-        item_id: true,
-        name: true,
-        release_date: true,
-        barcode: true,
-        description: true,
-        ROG_Url: true,
+      include: {
+        Items_images: true,
+        Items_props: true,
       },
     })
     .then((items) => {
