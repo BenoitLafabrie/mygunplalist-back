@@ -39,7 +39,7 @@ const port = 3000;
 app.use(
   cors({
     origin: "https://test.mygunplalist.com",
-    credentials: true,
+    allowedHeaders: ["Authorization"],
   })
 );
 
