@@ -38,8 +38,7 @@ const port = 3000;
 
 app.use(
   cors({
-    origin: "https://test.mygunplalist.com",
-    credentials: true,
+    origin: "http://localhost:5173",
   })
 );
 

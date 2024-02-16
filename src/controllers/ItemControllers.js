@@ -33,13 +33,9 @@ const updateItemController = async (req, res) => {
 const getAllItemsController = async (req, res) => {
   try {
     const items = await prisma.items.findMany({
-      select: {
-        item_id: true,
-        name: true,
-        release_date: true,
-        barcode: true,
-        description: true,
-        ROG_Url: true,
+      include: {
+        Items_images: true,
+        Items_props: true,
       },
     });
     res.status(200).send(items);
