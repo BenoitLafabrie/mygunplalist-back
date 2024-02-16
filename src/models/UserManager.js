@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import hashPassword from "../services/AuthHelper.js";
+const { PrismaClient } = require("@prisma/client");
+const hashPassword = require("../services/AuthHelper");
 
 const prisma = new PrismaClient();
 
@@ -152,4 +152,4 @@ const updateUser = async (id, body) => {
   }
 };
 
-export { insertUser, updateUser, getAllUsers, getUserById };
+module.exports = { insertUser, updateUser, getAllUsers, getUserById };

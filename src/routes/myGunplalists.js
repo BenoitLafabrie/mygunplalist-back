@@ -1,6 +1,6 @@
-import * as express from "express";
-import myGunplalistsControllers from "../controllers/MyGunplalistControllers.js";
-import AuthHelper from "../services/AuthHelper.js";
+const express = require("express");
+const myGunplalistsControllers = require("../controllers/MyGunplalistControllers");
+const AuthHelper = require("../services/AuthHelper");
 
 const router = express.Router();
 
@@ -35,4 +35,4 @@ router.delete(
   myGunplalistsControllers.deleteMyGunplalistController
 );
 
-export default router;
+module.exports = router;

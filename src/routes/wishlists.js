@@ -1,6 +1,6 @@
-import * as express from "express";
-import wishlistsControllers from "../controllers/WishlistControllers.js";
-import AuthHelper from "../services/AuthHelper.js";
+const express = require("express");
+const wishlistsControllers = require("../controllers/WishlistControllers");
+const AuthHelper = require("../services/AuthHelper");
 
 const router = express.Router();
 
@@ -35,4 +35,4 @@ router.delete(
   wishlistsControllers.deleteWishlistController
 );
 
-export default router;
+module.exports = router;

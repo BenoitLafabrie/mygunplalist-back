@@ -1,10 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
 const insertUserImage = async ({ name, description, userId }) => {
   try {
-    const userImage = await prisma.userImage.create({
+    const userImage = await prisma.users_images.create({
       data: {
         name,
         description,
@@ -42,7 +42,7 @@ const insertManyUserImages = async (items) => {
 
 const getAllUserImages = async () => {
   try {
-    const getAllUserImages = await prisma.userImage.findMany({
+    const getAllUserImages = await prisma.users_images.findMany({
       select: {
         id: true,
         name: true,
@@ -59,7 +59,7 @@ const getAllUserImages = async () => {
 
 const getUserImageById = async (id) => {
   try {
-    const getUserImage = await prisma.UserImage.findUnique({
+    const getUserImage = await prisma.users_images.findUnique({
       where: {
         id: parseInt(id),
       },
@@ -77,7 +77,7 @@ const getUserImageById = async (id) => {
 const updateUserImage = async (id, body) => {
   const { name, description, userId } = body;
   try {
-    const userImage = await prisma.userImage.update({
+    const userImage = await prisma.users_images.update({
       where: {
         id: parseInt(id),
       },
@@ -102,7 +102,7 @@ const updateUserImage = async (id, body) => {
 
 const deleteUserImage = async (id) => {
   try {
-    const userImage = await prisma.userImage.delete({
+    const userImage = await prisma.users_images.delete({
       where: {
         id: parseInt(id),
       },
@@ -114,7 +114,7 @@ const deleteUserImage = async (id) => {
   }
 };
 
-export {
+module.exports = {
   insertUserImage,
   insertManyUserImages,
   updateUserImage,

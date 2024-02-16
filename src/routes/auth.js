@@ -1,6 +1,6 @@
-import * as express from "express";
-import authControllers from "../controllers/AuthControllers.js";
-import authHelper from "../services/AuthHelper.js";
+const express = require("express");
+const authControllers = require("../controllers/AuthControllers");
+const authHelper = require("../services/AuthHelper");
 
 const router = express.Router();
 
@@ -10,4 +10,4 @@ router.post(
   authHelper.verifyPassword
 );
 
-export default router;
+module.exports = router;

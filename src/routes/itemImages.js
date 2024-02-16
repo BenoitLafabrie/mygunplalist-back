@@ -1,5 +1,5 @@
-import * as express from "express";
-import itemImagesControllers from "../controllers/ItemImageControllers.js";
+const express = require("express");
+const itemImagesControllers = require("../controllers/ItemImageControllers");
 
 const router = express.Router();
 
@@ -9,4 +9,4 @@ router.get("/:id", itemImagesControllers.getOneItemImageController);
 router.put("/:id", itemImagesControllers.updateItemImageController);
 router.delete("/:id", itemImagesControllers.deleteItemImageController);
 
-export default router;
+module.exports = router;

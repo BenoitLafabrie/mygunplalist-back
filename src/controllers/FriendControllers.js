@@ -1,29 +1,41 @@
-import {
+const {
   insertFriend,
   insertManyFriends,
   updateFriend,
   getAllFriends,
   getFriendById,
   deleteFriend,
-} from "../models/FriendManager.js";
+} = require("../models/FriendManager");
 
-const createFriendController = async (req, res) => {
-  const { status, data } = await insertFriend({
+const createFriendController = (req, res) => {
+  insertFriend({
     ...req.body,
     userId: req.payload.sub.id,
-  });
-  res.status(status).send(data);
+  })
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const createManyFriendsController = async (req, res) => {
-  const { status, data } = await insertManyFriends({
+const createManyFriendsController = (req, res) => {
+  insertManyFriends({
     ...req.body,
     userId: req.payload.sub.id,
-  });
-  res.status(status).send(data);
+  })
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const createFriendsController = async (req, res, next) => {
+const createFriendsController = (req, res, next) => {
   if (Array.isArray(req.body)) {
     return createManyFriendsController(req, res, next);
   } else {
@@ -31,28 +43,52 @@ const createFriendsController = async (req, res, next) => {
   }
 };
 
-const getAllFriendsController = async (req, res) => {
+const getAllFriendsController = (req, res) => {
   const { id } = req.payload.sub;
-  const { status, data } = await getAllFriends(parseInt(id));
-  res.status(status).send(data);
+  getAllFriends(parseInt(id))
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const getOneFriendController = async (req, res) => {
-  const { status, data } = await getFriendById(req.params.id);
-  res.status(status).send(data);
+const getOneFriendController = (req, res) => {
+  getFriendById(req.params.id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const updateFriendController = async (req, res) => {
-  const { status, data } = await updateFriend(req.params.id, req.body);
-  res.status(status).send(data);
+const updateFriendController = (req, res) => {
+  updateFriend(req.params.id, req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const deleteFriendController = async (req, res) => {
-  const { status, data } = await deleteFriend(req.params.id);
-  res.status(status).send(data);
+const deleteFriendController = (req, res) => {
+  deleteFriend(req.params.id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-export default {
+module.exports = {
   createFriendsController,
   getAllFriendsController,
   getOneFriendController,

@@ -1,5 +1,5 @@
-import * as express from "express";
-import achievementImagesControllers from "../controllers/AchievementImagesControllers.js";
+const express = require("express");
+const achievementImagesControllers = require("../controllers/AchievementImagesControllers");
 
 const router = express.Router();
 
@@ -17,4 +17,4 @@ router.put(
   achievementImagesControllers.updateAchievementImageController
 );
 
-export default router;
+module.exports = router;

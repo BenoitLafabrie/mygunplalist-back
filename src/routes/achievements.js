@@ -1,5 +1,5 @@
-import * as express from "express";
-import achievementControllers from "../controllers/AchievementControllers.js";
+const express = require("express");
+const achievementControllers = require("../controllers/AchievementControllers");
 
 const router = express.Router();
 
@@ -9,4 +9,4 @@ router.get("/:id", achievementControllers.getOneAchievementByIdController);
 router.put("/:id", achievementControllers.updateAchievementController);
 router.delete("/:id", achievementControllers.deleteAchievementByIdController);
 
-export default router;
+module.exports = router;

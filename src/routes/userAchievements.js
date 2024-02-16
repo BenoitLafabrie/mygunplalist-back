@@ -1,5 +1,5 @@
-import * as express from "express";
-import userAchievementsControllers from "../controllers/UserAchievementControllers.js";
+const express = require("express");
+const userAchievementsControllers = require("../controllers/UserAchievementControllers");
 
 const router = express.Router();
 
@@ -12,4 +12,4 @@ router.delete(
   userAchievementsControllers.deleteUserAchievementController
 );
 
-export default router;
+module.exports = router;

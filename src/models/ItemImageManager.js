@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
@@ -108,7 +108,7 @@ const deleteItemImage = async (id) => {
   }
 };
 
-export {
+module.exports = {
   insertItemImage,
   insertManyItemImages,
   updateItemImage,

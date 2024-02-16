@@ -1,5 +1,5 @@
-import * as express from "express";
-import friendsControllers from "../controllers/FriendControllers.js";
+const express = require("express");
+const friendsControllers = require("../controllers/FriendControllers");
 
 const router = express.Router();
 
@@ -9,4 +9,4 @@ router.get("/:id", friendsControllers.getOneFriendController);
 router.put("/:id", friendsControllers.updateFriendController);
 router.delete("/:id", friendsControllers.deleteFriendController);
 
-export default router;
+module.exports = router;
