@@ -38,8 +38,7 @@ const port = 3000;
 
 app.use(
   cors({
-    origin: "https://test.mygunplalist.com",
-    allowedHeaders: ["Authorization"],
+    origin: "http://localhost:5173",
   })
 );
 
