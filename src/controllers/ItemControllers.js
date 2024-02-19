@@ -72,13 +72,9 @@ const getOneItemByIdController = (req, res) => {
       where: {
         item_id: id,
       },
-      select: {
-        item_id: true,
-        name: true,
-        release_date: true,
-        barcode: true,
-        description: true,
-        ROG_Url: true,
+      include: {
+        Items_images: true,
+        Items_props: true,
       },
     })
     .then((oneItemById) => {
