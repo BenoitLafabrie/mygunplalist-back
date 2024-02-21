@@ -38,7 +38,7 @@ const port = 3000;
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.VITE_APP_FRONTEND_URL,
   })
 );
 
