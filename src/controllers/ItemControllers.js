@@ -65,6 +65,27 @@ const getAllItemsController = (req, res) => {
     });
 };
 
+const getLatestItemsController = (req, res) => {
+  prisma.items
+    .findMany({
+      take: 20,
+      orderBy: {
+        release_date: "desc",
+      },
+      include: {
+        Items_images: true,
+        Items_props: true,
+      },
+    })
+    .then((items) => {
+      res.status(200).send(items);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
+};
+
 const getOneItemByIdController = (req, res) => {
   const id = parseInt(req.params.id);
   prisma.items
@@ -118,6 +139,7 @@ module.exports = {
   createItemsController,
   updateItemController,
   getAllItemsController,
+  getLatestItemsController,
   getOneItemByIdController,
   deleteItemByIdController,
 };

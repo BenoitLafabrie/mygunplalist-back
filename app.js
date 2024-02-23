@@ -60,21 +60,21 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", rootRouter);
-app.use("/", authRouter);
-app.use("/users", usersRouter);
-app.use("/user-achievements", userAchievementsRouter);
-app.use("/user-images", userImagesRouter);
-app.use("/achievements", achievementsRouter);
-app.use("/achievements-images", achievementImagesRouter);
-app.use("/comments", commentsRouter);
-app.use("/friends", friendsRouter);
-app.use("/kits", itemsRouter);
-app.use("/kits-images", itemImagesRouter);
-app.use("/kits-props", itemPropsRouter);
-app.use("/mygunplalist", myGunplalistsRouter);
-app.use("/wishlist", wishlistsRouter);
-app.use("/item-status", itemsStatusRouter);
+app.use("/api/", rootRouter);
+app.use("/api/", authRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/user-achievements", userAchievementsRouter);
+app.use("/api/user-images", userImagesRouter);
+app.use("/api/achievements", achievementsRouter);
+app.use("/api/achievements-images", achievementImagesRouter);
+app.use("/api/comments", commentsRouter);
+app.use("/api/friends", friendsRouter);
+app.use("/api/kits", itemsRouter);
+app.use("/api/kits-images", itemImagesRouter);
+app.use("/api/kits-props", itemPropsRouter);
+app.use("/api/mygunplalist", myGunplalistsRouter);
+app.use("/api/wishlist", wishlistsRouter);
+app.use("/api/item-status", itemsStatusRouter);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
