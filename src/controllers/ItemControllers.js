@@ -96,6 +96,7 @@ const getOneItemByIdController = (req, res) => {
       include: {
         Items_images: true,
         Items_props: true,
+        Item_status: true,
       },
     })
     .then((oneItemById) => {

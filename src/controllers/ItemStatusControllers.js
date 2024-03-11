@@ -30,7 +30,7 @@ const getOneItemStatusController = (req, res) => {
 };
 
 const updateItemStatusController = (req, res) => {
-  updateItemStatus(req.params.id, req.body)
+  updateItemStatus({ id: req.params.id, body: req.body })
     .then(({ status, data }) => {
       res.status(status).send(data);
     })
@@ -39,6 +39,7 @@ const updateItemStatusController = (req, res) => {
       res.sendStatus(500);
     });
 };
+
 module.exports = {
   createItemStatusController,
   getOneItemStatusController,

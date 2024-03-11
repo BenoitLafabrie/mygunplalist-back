@@ -53,7 +53,7 @@ app
 app.use(logger("dev"));
 app.use(
   express.json({
-    /*{ limit: "20mb" }*/
+    /* limit: "20mb", */
   })
 );
 app.use(express.urlencoded({ extended: false }));

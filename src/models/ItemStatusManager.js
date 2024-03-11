@@ -28,7 +28,7 @@ const getItemStatusById = async (id) => {
   try {
     const getItemStatus = await prisma.item_status.findUnique({
       where: {
-        item_status_id: id,
+        item_status_id: parseInt(id),
       },
     });
     if (!getItemStatus) {
@@ -43,15 +43,14 @@ const getItemStatusById = async (id) => {
 };
 
 const updateItemStatus = async ({ id, body }) => {
-  const { status, item_status_id } = body;
+  const { status } = body;
   try {
     const itemStatus = await prisma.item_status.update({
       where: {
-        item_status_id: id,
+        item_status_id: parseInt(id),
       },
       data: {
-        status,
-        item_status_id,
+        status: status,
       },
     });
     return { status: 200, data: itemStatus };
