@@ -114,10 +114,25 @@ const updateItem = async (item_id, body) => {
   }
 };
 
+const deleteItemById = async (item_id) => {
+  try {
+    const item = await prisma.items.delete({
+      where: {
+        item_id: parseInt(item_id),
+      },
+    });
+    return { status: 200, data: item };
+  } catch (error) {
+    console.error(error);
+    return { status: 500, data: "Internal Error" };
+  }
+};
+
 module.exports = {
   insertItem,
   insertManyItems,
   updateItem,
   getAllItems,
   getItemById,
+  deleteItemById,
 };

@@ -19,14 +19,14 @@ model Achievements_images {
   achievement_image_id Int          @id @default(autoincrement())
   image_path           String?      @db.Text
   achievement_id       Int          @unique
-  Achievements         Achievements @relation(fields: [achievement_id], references: [achievement_id], onDelete: NoAction, onUpdate: NoAction, map: "Achievements_images_Achievements_achievement_id_fk")
+  Achievements         Achievements @relation(fields: [achievement_id], references: [achievement_id], onDelete: Cascade, onUpdate: Cascade, map: "Achievements_images_Achievements_achievement_id_fk")
 }
 
 model Comments {
   comment_id      Int     @id @default(autoincrement())
   comment_content String? @db.LongText
   user_id         Int
-  Users           Users   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "Comments_Users_user_id_fk")
+  Users           Users   @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade, map: "Comments_Users_user_id_fk")
 
   @@index([user_id], map: "Comments_Users_user_id_fk")
 }
@@ -34,7 +34,7 @@ model Comments {
 model Friends {
   friend_id Int   @id @default(autoincrement())
   user_id   Int
-  Users     Users @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "Friends_Users_user_id_fk")
+  Users     Users @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade, map: "Friends_Users_user_id_fk")
 
   @@index([user_id], map: "Friend_User_user_id_fk")
 }
@@ -46,7 +46,7 @@ model Items {
   barcode      String?        @db.VarChar(255)
   description  String?        @db.LongText
   ROG_Url      String?        @db.Text
-  Item_status  Item_status?   @relation("ItemToStatus")
+  Item_status  Item_status[]   @relation("ItemToStatus")
   Items_images Items_images[]
   Items_props  Items_props?
   Mygunplalist Mygunplalist[] @relation("ItemsToMygunplalist")
@@ -57,7 +57,7 @@ model Items_images {
   item_image_id Int     @id @default(autoincrement())
   item_id       Int
   image_path    String? @db.Text
-  Items         Items   @relation(fields: [item_id], references: [item_id], onDelete: NoAction, onUpdate: NoAction, map: "Items_images_Items_item_id_fk")
+  Items         Items   @relation(fields: [item_id], references: [item_id], onDelete: Cascade, onUpdate: Cascade, map: "Items_images_Items_item_id_fk")
 
   @@index([item_id], map: "Items_images_Items_item_id_fk")
 }
@@ -68,25 +68,26 @@ model Items_props {
   scale         String? @db.VarChar(255)
   series        String? @db.VarChar(255)
   item_id       Int     @unique
-  Items         Items   @relation(fields: [item_id], references: [item_id], onDelete: NoAction, onUpdate: NoAction, map: "Items_props_Items_item_id_fk")
+  Items         Items   @relation(fields: [item_id], references: [item_id], onDelete: Cascade, onUpdate: Cascade, map: "Items_props_Items_item_id_fk")
 }
 
 model Item_status {
   item_status_id  Int                @id @default(autoincrement())
-  item_id         Int                @unique
+  item_id         Int
   mygunplalist_id Int
   status          Item_status_status @default(Garage)
-  Items           Items              @relation("ItemToStatus", fields: [item_id], references: [item_id], onDelete: NoAction, onUpdate: NoAction)
-  Mygunplalist    Mygunplalist       @relation("GunplaListToStatus", fields: [mygunplalist_id], references: [mygunplalist_id], onDelete: NoAction, onUpdate: NoAction)
+  Items           Items              @relation("ItemToStatus", fields: [item_id], references: [item_id], onDelete: Cascade, onUpdate: Cascade)
+  Mygunplalist    Mygunplalist       @relation("GunplaListToStatus", fields: [mygunplalist_id], references: [mygunplalist_id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([mygunplalist_id], map: "Item_status_mygunplalist_id_fkey")
+  @@unique([item_id, mygunplalist_id], name: "Item_status_mygunplalist_id_item_id_key")
 }
 
 model Mygunplalist {
   mygunplalist_id Int           @id @default(autoincrement())
   user_id         Int           @unique
   Item_status     Item_status[] @relation("GunplaListToStatus")
-  Users           Users         @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "Mygunplalist_Users_user_id_fk")
+  Users           Users         @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade, map: "Mygunplalist_Users_user_id_fk")
   Items           Items[]       @relation("ItemsToMygunplalist")
 }
 
@@ -94,8 +95,8 @@ model User_achievements {
   user_achievement_id Int          @id @default(autoincrement())
   achievement_id      Int
   user_id             Int
-  Achievements        Achievements @relation(fields: [achievement_id], references: [achievement_id], onDelete: NoAction, onUpdate: NoAction, map: "User_achievements_Achievement_id_fk")
-  Users               Users        @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "User_achievements_User_user_id_fk")
+  Achievements        Achievements @relation(fields: [achievement_id], references: [achievement_id], onDelete: Cascade, onUpdate: Cascade, map: "User_achievements_Achievement_id_fk")
+  Users               Users        @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade, map: "User_achievements_User_user_id_fk")
 
   @@index([achievement_id], map: "User_achievements_Achievement_id_fk")
   @@index([user_id], map: "User_achievements_User_user_id_fk")
@@ -128,7 +129,7 @@ model Users_images {
   user_image_id Int     @id @default(autoincrement())
   image_path    String? @db.Text
   user_id       Int
-  Users         Users   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "Users_images_Users_user_id_fk")
+  Users         Users   @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade, map: "Users_images_Users_user_id_fk")
 
   @@index([user_id], map: "Users_images_Users_user_id_fk")
 }
@@ -136,7 +137,7 @@ model Users_images {
 model Wishlists {
   wishlist_id Int     @id @default(autoincrement())
   user_id     Int     @unique
-  Users       Users   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "Wishlists_Users_user_id_fk")
+  Users       Users   @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade, map: "Wishlists_Users_user_id_fk")
   Items       Items[] @relation("ItemsToWishlists")
 }
 

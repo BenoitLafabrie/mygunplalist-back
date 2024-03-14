@@ -3,6 +3,7 @@ const {
   insertItem,
   insertManyItems,
   updateItem,
+  deleteItemById,
 } = require("../models/ItemManager");
 
 const prisma = new PrismaClient();
@@ -112,28 +113,21 @@ const getOneItemByIdController = (req, res) => {
     });
 };
 
-const deleteItemByIdController = (req, res) => {
+const deleteItemByIdController = async (req, res) => {
   const { item_id } = req.params;
 
   if (isNaN(parseInt(item_id))) {
     return res.status(400).send("ID non valide");
   }
 
-  prisma.items
-    .delete({
-      where: { item_id: parseInt(item_id) },
-    })
-    .then((deleteById) => {
-      if (!deleteById) {
-        res.status(404).send("Aucun kit correspondant trouvé");
-      } else {
-        res.status(200).send("Kit supprimé");
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      res.sendStatus(500);
-    });
+  const result = await ItemManager.deleteItemById(item_id);
+
+  if (result.status === 200) {
+    res.status(200).send("Kit supprimé");
+  } else {
+    console.error(result.data);
+    res.status(500).send("Erreur interne du serveur");
+  }
 };
 
 module.exports = {
