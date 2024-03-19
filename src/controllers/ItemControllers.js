@@ -4,6 +4,7 @@ const {
   insertManyItems,
   updateItem,
   deleteItemById,
+  deleteItemsFromGunplaList,
 } = require("../models/ItemManager");
 
 const prisma = new PrismaClient();
@@ -130,6 +131,19 @@ const deleteItemByIdController = async (req, res) => {
   }
 };
 
+const deleteItemsFromGunplaListController = (req, res) => {
+  const { mygunplalist_id } = req.params;
+  const item_ids = req.body.item_ids;
+  deleteItemsFromGunplaList(item_ids, mygunplalist_id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
+};
+
 module.exports = {
   createItemsController,
   updateItemController,
@@ -137,4 +151,5 @@ module.exports = {
   getLatestItemsController,
   getOneItemByIdController,
   deleteItemByIdController,
+  deleteItemsFromGunplaListController,
 };

@@ -9,5 +9,9 @@ router.get("/latest", itemControllers.getLatestItemsController);
 router.get("/:id", itemControllers.getOneItemByIdController);
 router.put("/:id", itemControllers.updateItemController);
 router.delete("/:id", itemControllers.deleteItemByIdController);
+router.delete(
+  "/gunplalist/:mygunplalist_id/items",
+  itemControllers.deleteItemsFromGunplaListController
+);
 
 module.exports = router;
