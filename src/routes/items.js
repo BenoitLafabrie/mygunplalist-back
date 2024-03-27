@@ -13,5 +13,9 @@ router.delete(
   "/gunplalist/:mygunplalist_id/items",
   itemControllers.deleteItemsFromGunplaListController
 );
+router.delete(
+  "/wishlist/:wishlist_id/items",
+  itemControllers.deleteItemsFromWishlistController
+);
 
 module.exports = router;

@@ -145,6 +145,23 @@ const deleteItemsFromGunplaList = async (item_ids, mygunplalist_id) => {
   }
 };
 
+const deleteItemsFromWishlist = async (item_ids, wishlist_id) => {
+  try {
+    const results = await Promise.all(
+      item_ids.map(async (item_id) => {
+        return prisma.$executeRaw`DELETE FROM _ItemsToWishlists WHERE A = ${parseInt(
+          item_id
+        )} AND B = ${parseInt(wishlist_id)}`;
+      })
+    );
+
+    return { status: 200, data: results };
+  } catch (error) {
+    console.error(error);
+    return { status: 500, data: "Internal Error" };
+  }
+};
+
 module.exports = {
   insertItem,
   insertManyItems,
@@ -153,4 +170,5 @@ module.exports = {
   getItemById,
   deleteItemById,
   deleteItemsFromGunplaList,
+  deleteItemsFromWishlist,
 };
