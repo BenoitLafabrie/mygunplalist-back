@@ -7,7 +7,8 @@ const router = express.Router();
 router.post(
   "/login",
   authControllers.getUserByEmailAndPassToNext,
-  authHelper.verifyPassword
+  authHelper.verifyPassword,
+  authHelper.verifyRecaptcha
 );
 
 module.exports = router;

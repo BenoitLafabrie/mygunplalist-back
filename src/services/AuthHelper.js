@@ -74,9 +74,31 @@ function checkSameParamsIdAsToken(req, res, next) {
   } else res.sendStatus(403);
 }
 
+async function verifyRecaptcha(token) {
+  const secretKey = process.env.RECAPTCHA_KEY;
+  const response = await fetch(`process.env.RECAPTCHA_VERIFY_URL`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `secret=${secretKey}&response=${token}`,
+  });
+
+  const data = await response.json();
+
+  if (data.success) {
+    // reCAPTCHA verification succeeded
+    return true;
+  } else {
+    // reCAPTCHA verification failed
+    return false;
+  }
+}
+
 module.exports = {
   hashPassword,
   verifyPassword,
   verifyToken,
   checkSameParamsIdAsToken,
+  verifyRecaptcha,
 };
