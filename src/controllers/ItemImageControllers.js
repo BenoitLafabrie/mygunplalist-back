@@ -32,7 +32,7 @@ const createManyItemImagesController = (req, res) => {
 };
 
 const createItemImagesController = (req, res, next) => {
-  if (Array.isArray(req.body)) {
+  if (Array.isArray(req.body.image_path)) {
     return createManyItemImagesController(req, res, next);
   } else {
     return createItemImageController(req, res, next);

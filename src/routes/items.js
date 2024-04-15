@@ -6,9 +6,9 @@ const router = express.Router();
 router.post("/", itemControllers.createItemsController);
 router.get("/", itemControllers.getAllItemsController);
 router.get("/latest", itemControllers.getLatestItemsController);
+router.patch("/", itemControllers.updateItemsController);
 router.get("/:id", itemControllers.getOneItemByIdController);
-router.put("/:id", itemControllers.updateItemController);
-router.delete("/:id", itemControllers.deleteItemByIdController);
+router.delete("/", itemControllers.deleteItemsByIdController);
 router.delete(
   "/gunplalist/:mygunplalist_id/items",
   itemControllers.deleteItemsFromGunplaListController

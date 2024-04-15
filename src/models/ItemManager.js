@@ -84,44 +84,51 @@ const getItemById = async (item_id) => {
   }
 };
 
-const updateItem = async (item_id, body) => {
-  const { name, release_date, barcode, description, ROG_Url } = body;
+const updateItems = async (items) => {
   try {
-    const item = await prisma.items.update({
-      where: {
-        item_id: parseInt(item_id),
-      },
-      data: {
-        name: name,
-        release_date: release_date,
-        barcode: barcode,
-        description: description,
-        ROG_Url: ROG_Url,
-      },
-      select: {
-        item_id: true,
-        name: true,
-        release_date: true,
-        barcode: true,
-        description: true,
-        ROG_Url: true,
-      },
-    });
-    return { status: 200, data: item };
+    const updatedItems = [];
+    for (const item of items) {
+      const { item_id, name, release_date, barcode, description, ROG_Url } =
+        item;
+      const updatedItem = await prisma.items.update({
+        where: {
+          item_id: parseInt(item_id),
+        },
+        data: {
+          name: name,
+          release_date: release_date,
+          barcode: barcode,
+          description: description,
+          ROG_Url: ROG_Url,
+        },
+        select: {
+          item_id: true,
+          name: true,
+          release_date: true,
+          barcode: true,
+          description: true,
+          ROG_Url: true,
+        },
+      });
+      updatedItems.push(updatedItem);
+    }
+    return { status: 200, data: updatedItems };
   } catch (error) {
     console.error(error);
     return { status: 500, data: "Internal Error" };
   }
 };
 
-const deleteItemById = async (item_id) => {
+const deleteItemsByIds = async (item_ids) => {
   try {
-    const item = await prisma.items.delete({
+    const items = await prisma.items.deleteMany({
       where: {
-        item_id: parseInt(item_id),
+        item_id: {
+          in: item_ids.map((id) => parseInt(id)),
+        },
       },
     });
-    return { status: 200, data: item };
+    return { status: 200, data: items };
   } catch (error) {
     console.error(error);
     return { status: 500, data: "Internal Error" };
@@ -165,10 +172,10 @@ const deleteItemsFromWishlist = async (item_ids, wishlist_id) => {
 module.exports = {
   insertItem,
   insertManyItems,
-  updateItem,
+  updateItems,
   getAllItems,
   getItemById,
-  deleteItemById,
+  deleteItemsByIds,
   deleteItemsFromGunplaList,
   deleteItemsFromWishlist,
 };

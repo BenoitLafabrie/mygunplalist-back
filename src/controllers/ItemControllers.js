@@ -2,8 +2,8 @@ const { PrismaClient } = require("@prisma/client");
 const {
   insertItem,
   insertManyItems,
-  updateItem,
-  deleteItemById,
+  updateItems,
+  deleteItemsByIds,
   deleteItemsFromGunplaList,
   deleteItemsFromWishlist,
 } = require("../models/ItemManager");
@@ -40,8 +40,8 @@ const createItemsController = (req, res, next) => {
   }
 };
 
-const updateItemController = (req, res) => {
-  updateItem(req.params.id, req.body)
+const updateItemsController = (req, res) => {
+  updateItems(req.body)
     .then(({ status, data }) => {
       res.status(status).send(data);
     })
@@ -115,20 +115,20 @@ const getOneItemByIdController = (req, res) => {
     });
 };
 
-const deleteItemByIdController = async (req, res) => {
-  const { item_id } = req.params;
+const deleteItemsByIdController = async (req, res) => {
+  const { item_ids } = req.body;
 
-  if (isNaN(parseInt(item_id))) {
-    return res.status(400).send("ID non valide");
+  if (!Array.isArray(item_ids) || item_ids.some((id) => isNaN(parseInt(id)))) {
+    return res.status(400).send("Invalid IDs");
   }
 
-  const result = await ItemManager.deleteItemById(item_id);
+  const result = await deleteItemsByIds(item_ids);
 
   if (result.status === 200) {
-    res.status(200).send("Kit supprimé");
+    res.status(200).send("Kits deleted");
   } else {
     console.error(result.data);
-    res.status(500).send("Erreur interne du serveur");
+    res.status(500).send("Internal server error");
   }
 };
 
@@ -160,11 +160,11 @@ const deleteItemsFromWishlistController = (req, res) => {
 
 module.exports = {
   createItemsController,
-  updateItemController,
+  updateItemsController,
   getAllItemsController,
   getLatestItemsController,
   getOneItemByIdController,
-  deleteItemByIdController,
+  deleteItemsByIdController,
   deleteItemsFromGunplaListController,
   deleteItemsFromWishlistController,
 };
