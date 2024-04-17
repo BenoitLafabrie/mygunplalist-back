@@ -43,6 +43,16 @@ const verifyPassword = (req, res) => {
   });
 };
 
+const generatePasswordToken = (id) => {
+  const payload = {
+    sub: id,
+  };
+  return jwt.sign(payload, privateKey, {
+    expiresIn: "5m",
+    algorithm: "RS256",
+  });
+};
+
 const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -87,15 +97,14 @@ async function verifyRecaptcha(token) {
   const data = await response.json();
 
   if (data.success) {
-    // reCAPTCHA verification succeeded
     return true;
   } else {
-    // reCAPTCHA verification failed
     return false;
   }
 }
 
 module.exports = {
+  generatePasswordToken,
   hashPassword,
   verifyPassword,
   verifyToken,
