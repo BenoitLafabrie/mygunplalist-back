@@ -1,4 +1,5 @@
 const express = require("express");
+const helmet = require("helmet");
 const cors = require("cors");
 const createError = require("http-errors");
 const path = require("path");
@@ -35,6 +36,8 @@ process.on("SIGTERM", async () => {
 
 const app = express();
 const port = 3000;
+
+app.use(helmet());
 
 app.use(
   cors({
