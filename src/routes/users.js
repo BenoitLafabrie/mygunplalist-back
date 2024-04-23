@@ -1,10 +1,21 @@
-import * as express from "express";
-import userControllers from "../controllers/UserControllers.js";
-import authHelper from "../services/AuthHelper.js";
+const express = require("express");
+const userControllers = require("../controllers/UserControllers");
+const authHelper = require("../services/AuthHelper");
 
 const router = express.Router();
 
-router.get("/", userControllers.getAllUsersController);
+router.get(
+  "/",
+  authHelper.verifyToken,
+  authHelper.checkAdmin,
+  userControllers.getAllUsersController
+);
+
+router.get(
+  "/debug",
+  authHelper.verifyToken,
+  userControllers.getUsersDebugController
+);
 
 router.get(
   "/me",
@@ -35,4 +46,4 @@ router.delete(
   authHelper.checkSameParamsIdAsToken,
   userControllers.deleteUserByIdController
 );
-export default router;
+module.exports = router;

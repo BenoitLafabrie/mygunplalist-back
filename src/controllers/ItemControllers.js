@@ -1,23 +1,38 @@
-import { PrismaClient } from "@prisma/client";
-import {
+const { PrismaClient } = require("@prisma/client");
+const {
   insertItem,
   insertManyItems,
-  updateItem,
-} from "../models/ItemManager.js";
+  updateItems,
+  deleteItemsByIds,
+  deleteItemsFromGunplaList,
+  deleteItemsFromWishlist,
+} = require("../models/ItemManager");
 
 const prisma = new PrismaClient();
 
-const createItemController = async (req, res) => {
-  const { status, data } = await insertItem(req.body);
-  res.status(status).send(data);
+const createItemController = (req, res) => {
+  insertItem(req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const createManyItemsController = async (req, res) => {
-  const { status, data } = await insertManyItems(req.body);
-  res.status(status).send(data);
+const createManyItemsController = (req, res) => {
+  insertManyItems(req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const createItemsController = async (req, res, next) => {
+const createItemsController = (req, res, next) => {
   if (Array.isArray(req.body)) {
     return createManyItemsController(req, res, next);
   } else {
@@ -25,83 +40,131 @@ const createItemsController = async (req, res, next) => {
   }
 };
 
-const updateItemController = async (req, res) => {
-  const { status, data } = await updateItem(req.params.id, req.body);
-  res.status(status).send(data);
-};
-
-const getAllItemsController = async (req, res) => {
-  try {
-    const items = await prisma.items.findMany({
-      select: {
-        item_id: true,
-        name: true,
-        release_date: true,
-        barcode: true,
-        description: true,
-        ROG_Url: true,
-      },
+const updateItemsController = (req, res) => {
+  updateItems(req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
     });
-    res.status(200).send(items);
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
 };
 
-const getOneItemByIdController = async (req, res) => {
+const getAllItemsController = (req, res) => {
+  prisma.items
+    .findMany({
+      include: {
+        Items_images: true,
+        Items_props: true,
+      },
+    })
+    .then((items) => {
+      res.status(200).send(items);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
+};
+
+const getLatestItemsController = (req, res) => {
+  prisma.items
+    .findMany({
+      take: 20,
+      orderBy: {
+        release_date: "desc",
+      },
+      include: {
+        Items_images: true,
+        Items_props: true,
+      },
+    })
+    .then((items) => {
+      res.status(200).send(items);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
+};
+
+const getOneItemByIdController = (req, res) => {
   const id = parseInt(req.params.id);
-  try {
-    const oneItemById = await prisma.items.findUnique({
+  prisma.items
+    .findUnique({
       where: {
         item_id: id,
       },
-      select: {
-        item_id: true,
-        name: true,
-        release_date: true,
-        barcode: true,
-        description: true,
-        ROG_Url: true,
+      include: {
+        Items_images: true,
+        Items_props: true,
+        Item_status: true,
       },
+    })
+    .then((oneItemById) => {
+      if (!oneItemById) {
+        res.status(404).send("Aucun item correspondant trouvé");
+      } else {
+        res.status(200).send(oneItemById);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
     });
-    if (!oneItemById) {
-      res.status(404).send("Aucun item correspondant trouvé");
-    } else {
-      res.status(200).send(oneItemById);
-    }
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
+};
+
+const deleteItemsByIdController = async (req, res) => {
+  const { item_ids } = req.body;
+
+  if (!Array.isArray(item_ids) || item_ids.some((id) => isNaN(parseInt(id)))) {
+    return res.status(400).send("Invalid IDs");
+  }
+
+  const result = await deleteItemsByIds(item_ids);
+
+  if (result.status === 200) {
+    res.status(200).send("Kits deleted");
+  } else {
+    console.error(result.data);
+    res.status(500).send("Internal server error");
   }
 };
 
-const deleteItemByIdController = async (req, res) => {
-  const { item_id } = req.params;
-
-  if (isNaN(parseInt(item_id))) {
-    return res.status(400).send("ID non valide");
-  }
-
-  try {
-    const deleteById = await prisma.items.delete({
-      where: { item_id: parseInt(item_id) },
+const deleteItemsFromGunplaListController = (req, res) => {
+  const { mygunplalist_id } = req.params;
+  const item_ids = req.body.item_ids;
+  deleteItemsFromGunplaList(item_ids, mygunplalist_id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
     });
-    if (!deleteById) {
-      res.status(404).send("Aucun kit correspondant trouvé");
-    } else {
-      res.status(200).send("Kit supprimé");
-    }
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
 };
 
-export default {
+const deleteItemsFromWishlistController = (req, res) => {
+  const { wishlist_id } = req.params;
+  const item_ids = req.body.item_ids;
+  deleteItemsFromWishlist(item_ids, wishlist_id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
+};
+
+module.exports = {
   createItemsController,
-  updateItemController,
+  updateItemsController,
   getAllItemsController,
+  getLatestItemsController,
   getOneItemByIdController,
-  deleteItemByIdController,
+  deleteItemsByIdController,
+  deleteItemsFromGunplaListController,
+  deleteItemsFromWishlistController,
 };

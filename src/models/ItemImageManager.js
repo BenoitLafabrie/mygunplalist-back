@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
@@ -22,15 +22,24 @@ const insertItemImage = async ({ image_path, item_id }) => {
   }
 };
 
-const insertManyItemImages = async (items) => {
+const insertManyItemImages = async ({ image_path, item_id }) => {
   try {
-    const result = await prisma.items_images.createMany({
-      data: items.map((item) => ({
-        image_path: item.image_path,
-        item_id: item.item_id,
-      })),
-    });
-    return { status: 201, data: result };
+    const itemImages = [];
+    for (const path of image_path) {
+      const itemImage = await prisma.items_images.create({
+        data: {
+          image_path: path,
+          item_id,
+        },
+        select: {
+          item_image_id: true,
+          image_path: true,
+          item_id: true,
+        },
+      });
+      itemImages.push(itemImage);
+    }
+    return { status: 200, data: itemImages };
   } catch (error) {
     console.error(error);
     return { status: 500, data: "Internal Error" };
@@ -108,7 +117,7 @@ const deleteItemImage = async (id) => {
   }
 };
 
-export {
+module.exports = {
   insertItemImage,
   insertManyItemImages,
   updateItemImage,

@@ -1,29 +1,26 @@
-import express from "express";
-import cors from "cors";
-import path from "path";
-import cookieParser from "cookie-parser";
-import logger from "morgan";
-import { PrismaClient } from "@prisma/client";
-import authRouter from "./src/routes/auth.js";
-import rootRouter from "./src/routes/root.js";
-import achievementsRouter from "./src/routes/achievements.js";
-import achievementImagesRouter from "./src/routes/achievementImages.js";
-import commentsRouter from "./src/routes/comments.js";
-import friendsRouter from "./src/routes/friends.js";
-import itemsRouter from "./src/routes/items.js";
-import itemImagesRouter from "./src/routes/itemImages.js";
-import itemPropsRouter from "./src/routes/itemProps.js";
-import itemsStatusRouter from "./src/routes/itemStatus.js";
-import myGunplalistsRouter from "./src/routes/myGunplalists.js";
-import usersRouter from "./src/routes/users.js";
-import userAchievementsRouter from "./src/routes/userAchievements.js";
-import userImagesRouter from "./src/routes/userImages.js";
-import wishlistsRouter from "./src/routes/wishlists.js";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
+const express = require("express");
+const cors = require("cors");
+const createError = require("http-errors");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const { PrismaClient } = require("@prisma/client");
+const authRouter = require("./src/routes/auth");
+const rootRouter = require("./src/routes/root");
+const achievementsRouter = require("./src/routes/achievements");
+const achievementImagesRouter = require("./src/routes/achievementImages");
+const commentsRouter = require("./src/routes/comments");
+const friendsRouter = require("./src/routes/friends");
+const itemsRouter = require("./src/routes/items");
+const itemImagesRouter = require("./src/routes/itemImages");
+const itemPropsRouter = require("./src/routes/itemProps");
+const itemsStatusRouter = require("./src/routes/itemStatus");
+const myGunplalistsRouter = require("./src/routes/myGunplalists");
+const usersRouter = require("./src/routes/users");
+const userAchievementsRouter = require("./src/routes/userAchievements");
+const userImagesRouter = require("./src/routes/userImages");
+const wishlistsRouter = require("./src/routes/wishlists");
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 const prisma = new PrismaClient();
 
 process.on("SIGINT", async () => {
@@ -37,12 +34,11 @@ process.on("SIGTERM", async () => {
 });
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    credentials: true,
+    origin: process.env.VITE_APP_FRONTEND_URL,
   })
 );
 
@@ -55,26 +51,34 @@ app
   });
 
 app.use(logger("dev"));
-app.use(express.json());
+app.use(
+  express.json({
+    /* limit: "20mb", */
+  })
+);
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", rootRouter);
-app.use("/", authRouter);
-app.use("/users", usersRouter);
-app.use("/user-achievements", userAchievementsRouter);
-app.use("/user-images", userImagesRouter);
-app.use("/achievements", achievementsRouter);
-app.use("/achievements-images", achievementImagesRouter);
-app.use("/comments", commentsRouter);
-app.use("/friends", friendsRouter);
-app.use("/kits", itemsRouter);
-app.use("/kits-images", itemImagesRouter);
-app.use("/kits-props", itemPropsRouter);
-app.use("/mygunplalist", myGunplalistsRouter);
-app.use("/wishlist", wishlistsRouter);
-app.use("/item-status", itemsStatusRouter);
+app.use("/api/", rootRouter);
+app.use("/api/", authRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/user-achievements", userAchievementsRouter);
+app.use("/api/user-images", userImagesRouter);
+app.use("/api/achievements", achievementsRouter);
+app.use("/api/achievements-images", achievementImagesRouter);
+app.use("/api/comments", commentsRouter);
+app.use("/api/friends", friendsRouter);
+app.use("/api/kits", itemsRouter);
+app.use("/api/kits-images", itemImagesRouter);
+app.use("/api/kits-props", itemPropsRouter);
+app.use("/api/mygunplalist", myGunplalistsRouter);
+app.use("/api/wishlist", wishlistsRouter);
+app.use("/api/item-status", itemsStatusRouter);
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 // error handler
 app.use(function (err, req, res, next) {
@@ -87,4 +91,4 @@ app.use(function (err, req, res, next) {
   res.json(err.message);
 });
 
-export { app };
+module.exports = { app };

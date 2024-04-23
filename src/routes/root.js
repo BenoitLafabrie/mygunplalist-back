@@ -1,4 +1,4 @@
-import * as express from "express";
+const express = require("express");
 
 const router = express.Router();
 
@@ -7,4 +7,4 @@ router.get("/", function (req, res, next) {
   res.send("You're on MyGunplaList!!!");
 });
 
-export default router;
+module.exports = router;

@@ -1,13 +1,29 @@
-import * as express from "express";
-import authControllers from "../controllers/AuthControllers.js";
-import authHelper from "../services/AuthHelper.js";
+const express = require("express");
+const authControllers = require("../controllers/AuthControllers");
+const authHelper = require("../services/AuthHelper");
+const mailControllers = require("../controllers/MailControllers");
+const authManager = require("../models/AuthManager");
 
 const router = express.Router();
 
 router.post(
   "/login",
   authControllers.getUserByEmailAndPassToNext,
-  authHelper.verifyPassword
+  authHelper.verifyPassword,
+  authHelper.verifyRecaptcha
 );
 
-export default router;
+/* router.post(
+  "/forgottenpassword",
+  authManager.findUserByEmail,
+  authHelper.generatePasswordToken,
+  mailControllers.sendForgottenPassword
+);
+router.post(
+  "/resetpassword",
+  authHelper.verifyToken,
+  authHelper.hashPassword,
+  passwordControllers.resetPassword
+); */
+
+module.exports = router;

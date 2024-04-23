@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import hashPassword from "../services/AuthHelper.js";
+const { PrismaClient } = require("@prisma/client");
+const hashPassword = require("../services/AuthHelper");
 
 const prisma = new PrismaClient();
 
@@ -86,7 +86,7 @@ const getUserById = async (id) => {
       },
     });
     if (!getUser) {
-      return { status: 404, data: "Not Found" };
+      return { status: 404, data: "Utilisateur introuvable" };
     }
     return { status: 200, data: getUser };
   } catch (error) {
@@ -152,4 +152,4 @@ const updateUser = async (id, body) => {
   }
 };
 
-export { insertUser, updateUser, getAllUsers, getUserById };
+module.exports = { insertUser, updateUser, getAllUsers, getUserById };

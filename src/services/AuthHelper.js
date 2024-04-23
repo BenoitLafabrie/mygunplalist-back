@@ -1,55 +1,60 @@
-import argon2 from "argon2";
-import jwt from "jsonwebtoken";
-import * as fs from "fs";
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const { getUserById } = require("../models/UserManager");
 
 const privateKey = process.env.JWTRS256_KEY;
 
-const hashingOptions = {
-  type: argon2.argon2id,
-  memoryCost: 2 ** 16,
-  timeCost: 5,
-  parallelism: 1,
-};
+const saltRounds = 10;
 
-const hashPassword = async (req, res, next) => {
+const hashPassword = (req, res, next) => {
   if (typeof req.body.password !== "string") return next();
-  try {
-    req.body.password = await argon2.hash(req.body.password, hashingOptions);
-    next();
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(400);
-  }
-};
-
-const verifyPassword = async (req, res) => {
-  const isVerified = await argon2.verify(
-    req.user.password,
-    req.body.password,
-    hashingOptions
-  );
-  console.log(isVerified);
-  if (!isVerified) {
-    res.status(401).send("Unauthorized");
-  } else {
-    try {
-      const userWithoutPassword = req.user.user_id;
-      const payload = {
-        sub: userWithoutPassword,
-      };
-      const token = jwt.sign(payload, privateKey, {
-        // expiresIn: "1h",
-        algorithm: "RS256",
-      });
-      res.status(200).send({ token });
-    } catch (error) {
+  bcrypt
+    .hash(req.body.password, saltRounds)
+    .then((hashedPassword) => {
+      req.body.password = hashedPassword;
+      next();
+    })
+    .catch((error) => {
       console.error(error);
-      res.status(500).send("Internal Error");
-    }
-  }
+      res.sendStatus(400);
+    });
 };
 
-const verifyToken = async (req, res, next) => {
+const verifyPassword = (req, res) => {
+  bcrypt.compare(req.body.password, req.user.password).then((isVerified) => {
+    if (!isVerified) {
+      res.status(401).send("Unauthorized");
+    } else {
+      try {
+        const userWithoutPassword = req.user.user_id;
+        const payload = {
+          sub: userWithoutPassword,
+        };
+        const token = jwt.sign(payload, privateKey, {
+          // expiresIn: "1h",
+          algorithm: "RS256",
+        });
+        res.status(200).send({ token });
+      } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Error");
+      }
+    }
+  });
+};
+
+const generatePasswordToken = (id) => {
+  const payload = {
+    sub: id,
+  };
+  return jwt.sign(payload, privateKey, {
+    expiresIn: "5m",
+    algorithm: "RS256",
+  });
+};
+
+const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   const token = authHeader && authHeader.split(" ")[1];
@@ -58,15 +63,30 @@ const verifyToken = async (req, res, next) => {
     return res.status(401).send("Accès refusé");
   }
 
-  try {
-    const decoded = jwt.verify(token, privateKey);
+  jwt.verify(token, privateKey, (error, decoded) => {
+    if (error) {
+      console.error(error);
+      return res.status(401).send("Token non valide");
+    }
     req.payload = decoded;
-
     next();
-  } catch (error) {
-    console.error(error);
-    return res.status(401).send("Token non valide");
+  });
+};
+
+const checkAdmin = async (req, res, next) => {
+  const userId = req.payload.sub;
+  const response = await getUserById(userId);
+
+  if (response.status !== 200) {
+    return res.status(response.status).send(response.data);
   }
+
+  const user = response.data;
+  if (user.role !== "admin") {
+    return res.status(401).send("Accès refusé");
+  }
+
+  next();
 };
 
 function checkSameParamsIdAsToken(req, res, next) {
@@ -81,9 +101,31 @@ function checkSameParamsIdAsToken(req, res, next) {
   } else res.sendStatus(403);
 }
 
-export default {
+async function verifyRecaptcha(token) {
+  const secretKey = process.env.RECAPTCHA_KEY;
+  const response = await fetch(`process.env.RECAPTCHA_VERIFY_URL`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `secret=${secretKey}&response=${token}`,
+  });
+
+  const data = await response.json();
+
+  if (data.success) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+module.exports = {
+  checkAdmin,
+  generatePasswordToken,
   hashPassword,
   verifyPassword,
   verifyToken,
   checkSameParamsIdAsToken,
+  verifyRecaptcha,
 };

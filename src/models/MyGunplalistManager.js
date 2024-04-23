@@ -1,4 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+const { PrismaClient } = require("@prisma/client");
+const { insertItemStatus } = require("./ItemStatusManager");
 
 const prisma = new PrismaClient();
 
@@ -60,6 +61,12 @@ const getMygunplalistById = async (id) => {
           include: {
             Items_images: true,
             Items_props: true,
+            Item_status: {
+              select: {
+                item_status_id: true,
+                status: true,
+              },
+            },
           },
         },
       },
@@ -79,7 +86,8 @@ const getMygunplalistById = async (id) => {
 const updateMygunplalist = async (id, body) => {
   const { item_id } = body;
   try {
-    const mygunplalist = await prisma.mygunplalist.update({
+    // Update the mygunplalist
+    const updatedMygunplalist = await prisma.mygunplalist.update({
       where: {
         user_id: parseInt(id),
       },
@@ -101,9 +109,32 @@ const updateMygunplalist = async (id, body) => {
       },
     });
 
-    console.log(mygunplalist);
-    const itemsId = mygunplalist.Items[0];
-    const results = { mygunplalist, itemsId };
+    // Check if an Item_status entry already exists for the item_id and mygunplalist_id
+    const existingItemStatus = await prisma.item_status.findFirst({
+      where: {
+        item_id: parseInt(item_id),
+        mygunplalist_id: updatedMygunplalist.mygunplalist_id,
+      },
+    });
+
+    let newItemStatus;
+    if (existingItemStatus) {
+      // Update the existing Item_status entry
+      newItemStatus = await prisma.item_status.update({
+        where: { item_status_id: existingItemStatus.item_status_id },
+        data: { status: "Garage" },
+      });
+    } else {
+      // Create a new Item_status entry
+      newItemStatus = await insertItemStatus({
+        status: "Garage",
+        item_id: parseInt(item_id),
+        mygunplalist_id: updatedMygunplalist.mygunplalist_id,
+      });
+    }
+
+    const itemsId = updatedMygunplalist.Items[0];
+    const results = { updatedMygunplalist, itemsId, newItemStatus };
 
     return { status: 200, data: results };
   } catch (error) {
@@ -126,7 +157,7 @@ const deleteMygunplalist = async (id) => {
   }
 };
 
-export {
+module.exports = {
   insertMygunplalist,
   insertManyGunplalists,
   updateMygunplalist,

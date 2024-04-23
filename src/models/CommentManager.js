@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
@@ -108,7 +108,7 @@ const deleteComment = async (id) => {
   }
 };
 
-export {
+module.exports = {
   insertComment,
   insertManyComments,
   updateComment,

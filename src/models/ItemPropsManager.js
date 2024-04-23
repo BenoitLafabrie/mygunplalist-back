@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
@@ -120,7 +120,7 @@ const deleteItemProps = async (id) => {
   }
 };
 
-export {
+module.exports = {
   insertItemProps,
   insertManyItemProps,
   updateItemProps,

@@ -1,29 +1,41 @@
-import {
+const {
   insertUserAchievement,
   insertManyUserAchievements,
   updateUserAchievement,
   getAllUserAchievements,
   getUserAchievementById,
   deleteUserAchievement,
-} from "../models/UserAchievementManager.js";
+} = require("../models/UserAchievementManager");
 
-const createUserAchievementController = async (req, res) => {
-  const { status, data } = await insertUserAchievement({
+const createUserAchievementController = (req, res) => {
+  insertUserAchievement({
     ...req.body,
     userId: req.payload.sub.id,
-  });
-  res.status(status).send(data);
+  })
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const createManyUserAchievementsController = async (req, res) => {
-  const { status, data } = await insertManyUserAchievements({
+const createManyUserAchievementsController = (req, res) => {
+  insertManyUserAchievements({
     ...req.body,
     userId: req.payload.sub.id,
-  });
-  res.status(status).send(data);
+  })
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const createUserAchievementsController = async (req, res, next) => {
+const createUserAchievementsController = (req, res, next) => {
   if (Array.isArray(req.body)) {
     return createManyUserAchievementsController(req, res, next);
   } else {
@@ -31,28 +43,52 @@ const createUserAchievementsController = async (req, res, next) => {
   }
 };
 
-const getAllUserAchievementsController = async (req, res) => {
+const getAllUserAchievementsController = (req, res) => {
   const { id } = req.payload.sub;
-  const { status, data } = await getAllUserAchievements(parseInt(id));
-  res.status(status).send(data);
+  getAllUserAchievements(parseInt(id))
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const getOneUserAchievementController = async (req, res) => {
-  const { status, data } = await getUserAchievementById(req.params.id);
-  res.status(status).send(data);
+const getOneUserAchievementController = (req, res) => {
+  getUserAchievementById(req.params.id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const updateUserAchievementController = async (req, res) => {
-  const { status, data } = await updateUserAchievement(req.params.id, req.body);
-  res.status(status).send(data);
+const updateUserAchievementController = (req, res) => {
+  updateUserAchievement(req.params.id, req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const deleteUserAchievementController = async (req, res) => {
-  const { status, data } = await deleteUserAchievement(req.params.id);
-  res.status(status).send(data);
+const deleteUserAchievementController = (req, res) => {
+  deleteUserAchievement(req.params.id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-export default {
+module.exports = {
   createUserAchievementsController,
   getAllUserAchievementsController,
   getOneUserAchievementController,

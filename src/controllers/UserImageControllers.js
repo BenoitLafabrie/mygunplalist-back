@@ -1,29 +1,41 @@
-import {
+const {
   insertUserImage,
   insertManyUserImages,
   updateUserImage,
   getAllUserImages,
   getUserImageById,
   deleteUserImage,
-} from "../models/UserImageManager.js";
+} = require("../models/UserImageManager");
 
-const createUserImageController = async (req, res) => {
-  const { status, data } = await insertUserImage({
+const createUserImageController = (req, res) => {
+  insertUserImage({
     ...req.body,
     userId: req.payload.sub.id,
-  });
-  res.status(status).send(data);
+  })
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const createManyUserImagesController = async (req, res) => {
-  const { status, data } = await insertManyUserImages({
+const createManyUserImagesController = (req, res) => {
+  insertManyUserImages({
     ...req.body,
     userId: req.payload.sub.id,
-  });
-  res.status(status).send(data);
+  })
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const createUserImagesController = async (req, res, next) => {
+const createUserImagesController = (req, res, next) => {
   if (Array.isArray(req.body)) {
     return createManyUserImagesController(req, res, next);
   } else {
@@ -31,28 +43,52 @@ const createUserImagesController = async (req, res, next) => {
   }
 };
 
-const getAllUserImagesController = async (req, res) => {
+const getAllUserImagesController = (req, res) => {
   const { id } = req.payload.sub;
-  const { status, data } = await getAllUserImages(parseInt(id));
-  res.status(status).send(data);
+  getAllUserImages(parseInt(id))
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const getOneUserImageController = async (req, res) => {
-  const { status, data } = await getUserImageById(req.params.id);
-  res.status(status).send(data);
+const getOneUserImageController = (req, res) => {
+  getUserImageById(req.params.id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const updateUserImageController = async (req, res) => {
-  const { status, data } = await updateUserImage(req.params.id, req.body);
-  res.status(status).send(data);
+const updateUserImageController = (req, res) => {
+  updateUserImage(req.params.id, req.body)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-const deleteUserImageController = async (req, res) => {
-  const { status, data } = await deleteUserImage(req.params.id);
-  res.status(status).send(data);
+const deleteUserImageController = (req, res) => {
+  deleteUserImage(req.params.id)
+    .then(({ status, data }) => {
+      res.status(status).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 };
 
-export default {
+module.exports = {
   createUserImagesController,
   getAllUserImagesController,
   getOneUserImageController,

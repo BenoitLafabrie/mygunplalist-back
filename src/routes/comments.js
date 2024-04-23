@@ -1,5 +1,5 @@
-import * as express from "express";
-import commentsControllers from "../controllers/CommentControllers.js";
+const express = require("express");
+const commentsControllers = require("../controllers/CommentControllers");
 
 const router = express.Router();
 
@@ -9,4 +9,4 @@ router.get("/:id", commentsControllers.getOneCommentController);
 router.put("/:id", commentsControllers.updateCommentController);
 router.delete("/:id", commentsControllers.deleteCommentController);
 
-export default router;
+module.exports = router;

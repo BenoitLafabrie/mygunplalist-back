@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
@@ -86,8 +86,6 @@ const updateWishlist = async (id, body) => {
         },
       },
     });
-
-    console.log(wishlist);
     const itemsId = wishlist.Items[0];
     const results = { wishlist, itemsId };
 
@@ -112,7 +110,7 @@ const deleteWishlist = async (id) => {
   }
 };
 
-export {
+module.exports = {
   insertWishlist,
   updateWishlist,
   deleteWishlist,
