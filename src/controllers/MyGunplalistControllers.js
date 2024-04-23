@@ -6,11 +6,17 @@ const {
   updateMygunplalist,
   deleteMygunplalist,
 } = require("../models/MyGunplalistManager");
+const jwt = require("jsonwebtoken");
 
 const createMyGunplalistController = (req, res) => {
+  const token = req.body.token;
+  const decodedToken = jwt.decode(token);
+  console.log(decodedToken);
+  const userId = decodedToken.user_id;
+
   insertMygunplalist({
     ...req.body,
-    userId: req.body.userId,
+    user_id: userId,
   })
     .then(({ status, data }) => {
       res.status(status).send(data);
@@ -24,8 +30,8 @@ const createMyGunplalistController = (req, res) => {
 const createManyMyGunplalistsController = (req, res) => {
   insertManyGunplalists({
     ...req.body,
-    itemId: req.payload.sub.id,
-    userId: req.body.userId,
+    item_id: req.payload.sub.id,
+    user_id: req.body.user_id,
   })
     .then(({ status, data }) => {
       res.status(status).send(data);

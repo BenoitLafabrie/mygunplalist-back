@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
+const { getUserById } = require("../models/UserManager");
 
 const privateKey = process.env.JWTRS256_KEY;
 
@@ -72,6 +73,22 @@ const verifyToken = (req, res, next) => {
   });
 };
 
+const checkAdmin = async (req, res, next) => {
+  const userId = req.payload.sub;
+  const response = await getUserById(userId);
+
+  if (response.status !== 200) {
+    return res.status(response.status).send(response.data);
+  }
+
+  const user = response.data;
+  if (user.role !== "admin") {
+    return res.status(401).send("Accès refusé");
+  }
+
+  next();
+};
+
 function checkSameParamsIdAsToken(req, res, next) {
   if (!req.payload) {
     console.error(
@@ -104,6 +121,7 @@ async function verifyRecaptcha(token) {
 }
 
 module.exports = {
+  checkAdmin,
   generatePasswordToken,
   hashPassword,
   verifyPassword,

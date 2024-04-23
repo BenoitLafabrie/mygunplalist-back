@@ -4,7 +4,18 @@ const authHelper = require("../services/AuthHelper");
 
 const router = express.Router();
 
-router.get("/", userControllers.getAllUsersController);
+router.get(
+  "/",
+  authHelper.verifyToken,
+  authHelper.checkAdmin,
+  userControllers.getAllUsersController
+);
+
+router.get(
+  "/debug",
+  authHelper.verifyToken,
+  userControllers.getUsersDebugController
+);
 
 router.get(
   "/me",

@@ -4,12 +4,7 @@ const AuthHelper = require("../services/AuthHelper");
 
 const router = express.Router();
 
-router.post(
-  "/",
-  AuthHelper.verifyToken,
-  AuthHelper.checkSameParamsIdAsToken,
-  myGunplalistsControllers.createMyGunplalistsController
-);
+router.post("/", myGunplalistsControllers.createMyGunplalistsController);
 router.get(
   "/",
   AuthHelper.verifyToken,

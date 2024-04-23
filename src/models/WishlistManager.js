@@ -86,8 +86,6 @@ const updateWishlist = async (id, body) => {
         },
       },
     });
-
-    console.log(wishlist);
     const itemsId = wishlist.Items[0];
     const results = { wishlist, itemsId };
 

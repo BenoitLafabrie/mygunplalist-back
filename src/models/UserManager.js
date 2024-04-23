@@ -86,7 +86,7 @@ const getUserById = async (id) => {
       },
     });
     if (!getUser) {
-      return { status: 404, data: "Not Found" };
+      return { status: 404, data: "Utilisateur introuvable" };
     }
     return { status: 200, data: getUser };
   } catch (error) {

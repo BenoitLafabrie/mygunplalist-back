@@ -6,6 +6,7 @@ const {
   getUserById,
 } = require("../models/UserManager");
 const fs = require("fs");
+const { log } = require("console");
 
 const privateKey = process.env.JWTRS256_KEY;
 const prisma = new PrismaClient();
@@ -74,6 +75,22 @@ const getAllUsersController = (req, res) => {
     });
 };
 
+const getUsersDebugController = async (req, res) => {
+  try {
+    const result = await prisma.$queryRaw`SELECT * FROM Users`;
+    res.status(200).send("Ok");
+  } catch (error) {
+    fs.appendFile(
+      "error.log",
+      `${new Date().toISOString()} - ${error}\n`,
+      function (err) {
+        if (err) console.error("Error writing to log file", err);
+      }
+    );
+    res.status(500).send(error);
+  }
+};
+
 const getOneUserByIdController = (req, res) => {
   const id = req.payload.sub;
   prisma.users
@@ -137,6 +154,7 @@ const deleteUserByIdController = (req, res) => {
 module.exports = {
   createUserController,
   getAllUsersController,
+  getUsersDebugController,
   getOneUserByIdController,
   updateUserController,
   deleteUserByIdController,
