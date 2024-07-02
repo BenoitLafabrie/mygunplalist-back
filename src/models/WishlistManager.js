@@ -47,7 +47,11 @@ const getWishlistById = async (id) => {
       },
     });
     if (!getWishlistId) {
-      getWishlistId = await insertWishlist({ user_id: parseInt(id) });
+      let result = await insertWishlist({ user_id: parseInt(id) });
+      return {
+        status: 200,
+        data: { items: [], wishlist_id: result?.wishlistId },
+      };
     }
     const wishlistId = getWishlistId.wishlist_id;
     // Get wishlist's items
@@ -56,13 +60,13 @@ const getWishlistById = async (id) => {
         B: parseInt(wishlistId),
       },
     });
-    const result = {
+    const results = {
       itemsToWishlists,
       wishlistId,
     };
 
-    // Get the item_ids from the result array
-    const itemIds = result.itemsToWishlists.map((wishlist) => wishlist.A);
+    // Get the item_ids from the results array
+    const itemIds = results.itemsToWishlists.map((wishlist) => wishlist.A);
 
     // Fetch the corresponding items
     const items = await prisma.items.findMany({
@@ -79,7 +83,7 @@ const getWishlistById = async (id) => {
 
     return {
       status: 200,
-      data: { items: items, wishlist_id: result?.wishlistId },
+      data: { items: items, wishlist_id: results?.wishlistId },
     };
   } catch (error) {
     console.error(error);

@@ -61,6 +61,7 @@ model Items {
   Item_status  Item_status[]
   Items_images Items_images[]
   Items_props  Items_props?
+  ItemsToWishlists  ItemsToWishlists[]
 }
 
 model Items_images {
@@ -136,6 +137,7 @@ model Wishlists {
 model ItemsToWishlists {
   A Int //item_id
   B Int //wishlist_id
+  Items Items @relation(fields: [A], references: [item_id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([A, B], map: "_ItemsToWishlists_AB_unique")
   @@index([B], map: "_ItemsToWishlists_B_index")

@@ -72,8 +72,12 @@ const getMygunplalistById = async (id) => {
       },
     });
     if (!getMygunplalist) {
-      insertMygunplalist({ user_id: parseInt(id) });
-      return { status: 200, data: "Not found but created" };
+      let result = await insertMygunplalist({ user_id: parseInt(id) });
+      result.data.Item_status = [];
+      return {
+        status: 200,
+        data: result.data,
+      };
     } else {
       return { status: 200, data: getMygunplalist };
     }
