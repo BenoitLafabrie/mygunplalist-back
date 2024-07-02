@@ -40,8 +40,28 @@ const updateItemStatusController = (req, res) => {
     });
 };
 
+const deleteItemStatusFromGunplaList = async (item_status_ids) => {
+  try {
+    const results = await prisma.item_status.deleteMany({
+      where: {
+        item_status_id: {
+          in: item_status_ids.map((id) => parseInt(id)),
+        },
+      },
+    });
+
+    // check that it's the right mygunplalist where items are deleted
+
+    return { status: 200, data: results };
+  } catch (error) {
+    console.error(error);
+    return { status: 500, data: "Internal Error" };
+  }
+};
+
 module.exports = {
   createItemStatusController,
   getOneItemStatusController,
   updateItemStatusController,
+  deleteItemStatusFromGunplaList,
 };

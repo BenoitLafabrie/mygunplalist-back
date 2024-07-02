@@ -5,7 +5,7 @@ const authHelper = require("../services/AuthHelper");
 const router = express.Router();
 
 router.post("/", itemControllers.createItemsController);
-router.get("/", authHelper.verifyToken, itemControllers.getAllItemsController);
+router.get("/", itemControllers.getAllItemsController);
 router.get("/latest", itemControllers.getLatestItemsController);
 router.patch("/", itemControllers.updateItemsController);
 router.get("/:id", itemControllers.getOneItemByIdController);

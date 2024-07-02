@@ -57,14 +57,14 @@ const getMygunplalistById = async (id) => {
         user_id: parseInt(id),
       },
       include: {
-        Items: {
-          include: {
-            Items_images: true,
-            Items_props: true,
-            Item_status: {
-              select: {
-                item_status_id: true,
-                status: true,
+        Item_status: {
+          select: {
+            item_status_id: true,
+            status: true,
+            Items: {
+              include: {
+                Items_images: true,
+                Items_props: true,
               },
             },
           },
@@ -85,35 +85,24 @@ const getMygunplalistById = async (id) => {
 
 const updateMygunplalist = async (id, body) => {
   const { item_id } = body;
+
   try {
-    // Update the mygunplalist
-    const updatedMygunplalist = await prisma.mygunplalist.update({
+    // Retrieving gunplalist_id
+    const getMygunplalist_id = await prisma.mygunplalist.findFirst({
       where: {
         user_id: parseInt(id),
       },
-      data: {
-        Items: {
-          connect: {
-            item_id: parseInt(item_id),
-          },
-        },
-      },
       select: {
         mygunplalist_id: true,
-        user_id: true,
-        Items: {
-          select: {
-            item_id: true,
-          },
-        },
       },
     });
 
+    const mygunplalist_id = getMygunplalist_id.mygunplalist_id;
     // Check if an Item_status entry already exists for the item_id and mygunplalist_id
     const existingItemStatus = await prisma.item_status.findFirst({
       where: {
         item_id: parseInt(item_id),
-        mygunplalist_id: updatedMygunplalist.mygunplalist_id,
+        mygunplalist_id: parseInt(mygunplalist_id),
       },
     });
 
@@ -129,11 +118,32 @@ const updateMygunplalist = async (id, body) => {
       newItemStatus = await insertItemStatus({
         status: "Garage",
         item_id: parseInt(item_id),
-        mygunplalist_id: updatedMygunplalist.mygunplalist_id,
+        mygunplalist_id: parseInt(mygunplalist_id),
       });
     }
 
-    const itemsId = updatedMygunplalist.Items[0];
+    // Update the mygunplalist
+    const updatedMygunplalist = await prisma.mygunplalist.update({
+      where: {
+        mygunplalist_id: parseInt(mygunplalist_id),
+      },
+      data: {
+        Item_status: {
+          connect: {
+            item_status_id: newItemStatus.data.item_status_id,
+          },
+        },
+      },
+      select: {
+        mygunplalist_id: true,
+        Item_status: true,
+        user_id: true,
+      },
+    });
+
+    const itemsId = updatedMygunplalist.Item_status.find(
+      (itemStatus) => itemStatus.item_id === newItemStatus.item_id
+    );
     const results = { updatedMygunplalist, itemsId, newItemStatus };
 
     return { status: 200, data: results };
