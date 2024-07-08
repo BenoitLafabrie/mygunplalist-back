@@ -5,6 +5,8 @@ const {
   updateUser,
   getUserById,
 } = require("../models/UserManager");
+const { insertMygunplalist } = require("../models/MyGunplalistManager");
+const { insertWishlist } = require("../models/WishlistManager");
 const fs = require("fs");
 const { log } = require("console");
 
@@ -13,16 +15,21 @@ const prisma = new PrismaClient();
 
 const createUserController = (req, res) => {
   insertUser(req.body)
-    .then(({ status, data }) => {
+    .then(async ({ status, data }) => {
       if (status === 201) {
-        const payload = { user_id: data.user_id };
+        const payload = { sub: data.user_id };
         const token = jwt.sign(payload, privateKey, {
           // expiresIn: "1h",
           algorithm: "RS256",
         });
         data = { token };
+        await insertMygunplalist({ user_id: parseInt(data.user_id) });
+        await insertWishlist({ user_id: parseInt(data.user_id) });
+        res.status(status).send(data);
+      } else {
+        console.error(error);
+        res.sendStatus(500);
       }
-      res.status(status).send(data);
     })
     .catch((error) => {
       console.error(error);
