@@ -37,25 +37,54 @@ const getAllWishlists = async () => {
 
 const getWishlistById = async (id) => {
   try {
-    const getWishlist = await prisma.wishlists.findUnique({
+    // Get the user's wishlist_id
+    let getWishlistId = await prisma.wishlists.findUnique({
       where: {
         user_id: parseInt(id),
       },
-      include: {
-        Items: {
-          include: {
-            Items_images: true,
-            Items_props: true,
-          },
-        },
+      select: {
+        wishlist_id: true,
       },
     });
-    if (!getWishlist) {
-      insertWishlist({ user_id: parseInt(id) });
-      return { status: 200, data: "Not found but created" };
-    } else {
-      return { status: 200, data: getWishlist };
+    if (!getWishlistId) {
+      let result = await insertWishlist({ user_id: parseInt(id) });
+      return {
+        status: 200,
+        data: { items: [], wishlist_id: result?.wishlistId },
+      };
     }
+    const wishlistId = getWishlistId.wishlist_id;
+    // Get wishlist's items
+    const itemsToWishlists = await prisma.itemsToWishlists.findMany({
+      where: {
+        B: parseInt(wishlistId),
+      },
+    });
+    const results = {
+      itemsToWishlists,
+      wishlistId,
+    };
+
+    // Get the item_ids from the results array
+    const itemIds = results.itemsToWishlists.map((wishlist) => wishlist.A);
+
+    // Fetch the corresponding items
+    const items = await prisma.items.findMany({
+      where: {
+        item_id: {
+          in: itemIds,
+        },
+      },
+      include: {
+        Items_images: true,
+        Items_props: true,
+      },
+    });
+
+    return {
+      status: 200,
+      data: { items: items, wishlist_id: results?.wishlistId },
+    };
   } catch (error) {
     console.error(error);
     return { status: 500, data: "Internal Error" };
@@ -65,29 +94,29 @@ const getWishlistById = async (id) => {
 const updateWishlist = async (id, body) => {
   const { item_id } = body;
   try {
-    const wishlist = await prisma.wishlists.update({
+    const getWishlistId = await prisma.wishlists.findUnique({
       where: {
         user_id: parseInt(id),
       },
-      data: {
-        Items: {
-          connect: {
-            item_id: parseInt(item_id),
-          },
-        },
-      },
       select: {
         wishlist_id: true,
-        user_id: true,
-        Items: {
-          select: {
-            item_id: true,
-          },
-        },
       },
     });
-    const itemsId = wishlist.Items[0];
-    const results = { wishlist, itemsId };
+    const wishlistId = getWishlistId.wishlist_id;
+
+    const wishlist = await prisma.itemsToWishlists.create({
+      data: {
+        A: parseInt(item_id),
+        B: parseInt(wishlistId),
+      },
+      select: {
+        A: true,
+        B: true,
+      },
+    });
+
+    const itemId = wishlist.B;
+    const results = { wishlist, itemId };
 
     return { status: 200, data: results };
   } catch (error) {
@@ -100,7 +129,7 @@ const deleteWishlist = async (id) => {
   try {
     const wishlist = await prisma.wishlists.delete({
       where: {
-        user_id: parseInt(id),
+        wishlist_id: parseInt(id),
       },
     });
     return { status: 200, data: wishlist };

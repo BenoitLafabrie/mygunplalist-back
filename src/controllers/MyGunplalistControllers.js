@@ -11,7 +11,6 @@ const jwt = require("jsonwebtoken");
 const createMyGunplalistController = (req, res) => {
   const token = req.body.token;
   const decodedToken = jwt.decode(token);
-  console.log(decodedToken);
   const userId = decodedToken.user_id;
 
   insertMygunplalist({

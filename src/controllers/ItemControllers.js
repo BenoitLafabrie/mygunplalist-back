@@ -4,9 +4,11 @@ const {
   insertManyItems,
   updateItems,
   deleteItemsByIds,
-  deleteItemsFromGunplaList,
   deleteItemsFromWishlist,
 } = require("../models/ItemManager");
+const {
+  deleteItemStatusFromGunplaList,
+} = require("../controllers/ItemStatusControllers");
 
 const prisma = new PrismaClient();
 
@@ -134,8 +136,8 @@ const deleteItemsByIdController = async (req, res) => {
 
 const deleteItemsFromGunplaListController = (req, res) => {
   const { mygunplalist_id } = req.params;
-  const item_ids = req.body.item_ids;
-  deleteItemsFromGunplaList(item_ids, mygunplalist_id)
+  const item_status_ids = req.body.item_status_ids;
+  deleteItemStatusFromGunplaList(item_status_ids, mygunplalist_id)
     .then(({ status, data }) => {
       res.status(status).send(data);
     })
